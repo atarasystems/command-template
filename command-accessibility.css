@@ -1,0 +1,50 @@
+/* Command accessibility baseline: large, high-contrast text for easy reading.
+   Default to larger readable type, generous controls, calm spacing,
+   and unmistakable visual feedback when a control has been clicked. */
+html { font-size: 18px; }
+body { font-size: 18px; line-height: 1.55; }
+button, input, select, textarea { font-size: 17px; line-height: 1.35; }
+button, .btn, a.btn { min-height: 46px; }
+button, .btn, a.btn {
+  transition: background-color .12s ease, color .12s ease, border-color .12s ease, box-shadow .12s ease, transform .08s ease;
+}
+.btn { border-radius: 10px !important; padding: 11px 16px !important; font-size: 17px !important; }
+.btn.small { min-height: 44px; padding: 9px 13px !important; font-size: 16px !important; }
+
+/* Click acknowledgement: after a button is clicked it stays visibly green
+   while it retains focus, so there is no ambiguity about whether the click registered. */
+button:not(:disabled):active, .btn:not(:disabled):active, a.btn:active {
+  transform: translateY(1px);
+}
+button:not(:disabled):focus, .btn:not(:disabled):focus, a.btn:focus {
+  background: #3f6b5b !important;
+  color: #fff !important;
+  border-color: #3f6b5b !important;
+  box-shadow: 0 0 0 4px rgba(63,107,91,.22) !important;
+  outline: none;
+}
+button:disabled, .btn:disabled {
+  cursor: not-allowed;
+}
+
+.help, .meta { font-size: 16px !important; line-height: 1.55 !important; }
+.badge { font-size: 14px !important; padding: 5px 9px !important; }
+.field label, .profile-label { font-size: 15px !important; line-height: 1.35 !important; }
+.field input, .field select, .field textarea, .context select { min-height: 46px; font-size: 17px !important; padding: 11px 12px !important; }
+.panel-head h2, .panel h2 { font-size: 20px !important; }
+.hero h1 { font-size: 34px !important; line-height: 1.2; }
+.hero p { font-size: 18px !important; line-height: 1.55; }
+.metric strong { font-size: 30px !important; }
+.metric span { font-size: 14px !important; line-height: 1.35; }
+.row strong, .title { font-size: 18px !important; line-height: 1.4; }
+.entity-card h3 { font-size: 18px !important; }
+.entity-card p, .entity-stat, .profile-value { font-size: 16px !important; line-height: 1.55; }
+.tab { min-height: 48px; font-size: 17px !important; padding: 12px 15px !important; }
+.chip { font-size: 14px !important; padding: 5px 8px !important; }
+.date, .day-date, .day-head, .cal-item, .cal-item strong { font-size: 15px !important; }
+.empty { font-size: 17px !important; line-height: 1.55; }
+.toast { font-size: 16px !important; line-height: 1.45; }
+@media (max-width: 900px) {
+  html, body { font-size: 17px; }
+  .hero h1 { font-size: 30px !important; }
+}

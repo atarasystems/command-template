@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Know it | Command</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/command-theme.css">
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('atara-command.theme')==='sea'?'sea':'rooftop')}catch(e){document.documentElement.setAttribute('data-theme','rooftop')}</script>
+<style>
+:root{--bg:var(--cmd-ground,#f6f1f6);--card:var(--cmd-card,#fff);--ink:var(--cmd-ink,#241c2b);--body:var(--cmd-body,#3d3346);--muted:var(--cmd-muted,#6b6274);--line:var(--cmd-line,#e6dde8);--primary:var(--cmd-primary,#5b3f9e);--primary-ink:var(--cmd-primary-ink,#fff);--soft:var(--cmd-primary-soft,#efe8fa);--good:#2f7a5b;--good-soft:#e5f4ec;--miss:#a8432f;--miss-soft:#fbe9e4}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.hidden{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px 48px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+h1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:30px;margin:0}
+.sub{color:var(--muted);font-size:15px;margin:2px 0 0}
+.btn{appearance:none;border:0;border-radius:999px;padding:11px 18px;font:600 15px 'DM Sans',sans-serif;background:var(--primary);color:var(--primary-ink);cursor:pointer;min-height:44px}
+.btn.soft{background:var(--soft);color:var(--primary)}
+.btn.small{padding:8px 14px;min-height:36px;font-size:14px;white-space:nowrap}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.tabs{display:flex;gap:8px;margin:6px 0 16px;overflow-x:auto}
+.tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:9px 16px;font:600 15px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
+.tab[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.game{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--card);text-align:left;cursor:pointer;font:inherit;color:inherit}
+.game strong{display:block;font-size:19px;margin-bottom:4px}
+.game span{color:var(--muted);font-size:14px;line-height:1.4}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.chip{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:7px 14px;font:600 14px 'DM Sans',sans-serif;color:var(--body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--soft);color:var(--primary);border-color:var(--primary)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px}
+.board{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(min-width:620px){.board{grid-template-columns:1fr 1fr 1fr}}
+.tile{min-height:92px;border:2px solid var(--line);background:var(--card);border-radius:16px;padding:12px;font:600 15px/1.3 'DM Sans',sans-serif;color:var(--ink);text-align:left;cursor:pointer;transition:transform .15s,opacity .35s,background .2s}
+.tile.answer{background:var(--soft)}
+.tile.picked{border-color:var(--primary);transform:scale(.98)}
+.tile.done{opacity:0;pointer-events:none;transform:scale(.92)}
+.tile.miss{border-color:var(--miss);background:var(--miss-soft);animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.q{font:600 21px/1.35 'DM Sans',sans-serif;margin:4px 0 16px}
+.opts{display:grid;gap:10px}
+.opt{border:2px solid var(--line);background:var(--card);border-radius:16px;padding:14px;font:600 16px/1.35 'DM Sans',sans-serif;text-align:left;cursor:pointer;color:var(--ink)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--miss);background:var(--miss-soft)}
+.explain{margin-top:14px;padding:14px;border-radius:14px;background:var(--soft);font-size:15px;line-height:1.5}
+.src{color:var(--muted);font-size:13px;margin-top:6px}
+.src a{color:var(--primary)}
+.topic{font:700 13px 'DM Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:10px}
+.card .big{font:700 22px/1.25 'DM Sans',sans-serif;margin-bottom:4px}
+.card .what{font-size:15px;color:var(--body);line-height:1.45}
+.card .note{margin-top:8px;font-size:14px;color:var(--body);background:var(--soft);border-radius:10px;padding:8px 10px}
+.done-box{text-align:center;padding:26px 10px}
+.done-box strong{display:block;font:600 24px 'Fraunces',Georgia,serif;margin-bottom:6px}
+.muted{color:var(--muted)}
+.gate{max-width:360px;margin:20vh auto;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:20px}
+.gate input{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;margin:10px 0}
+.sound{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:14px}
+</style>
+<script src="/command-settings.js"></script>
+</head>
+<body>
+<div id="gate" class="gate hidden"><h1>Know it</h1><p class="sub" data-app-name>Command</p><input id="gate-password" type="password" autocomplete="current-password" placeholder="Password"><button class="btn" onclick="login()">Open</button><p id="gate-error" class="muted"></p></div>
+
+<div id="app" class="wrap hidden">
+  <header class="top">
+    <div><h1>Know it</h1><p class="sub">The facts to have ready in any room.</p></div>
+    <a class="btn soft small" href="/">Command</a>
+  </header>
+  <div class="tabs" role="tablist">
+    <button class="tab" data-tab="play" aria-pressed="true">Play</button>
+    <button class="tab" data-tab="statistics" aria-pressed="false">Statistics</button>
+    <button class="tab" data-tab="pitch" aria-pressed="false">My pitch</button>
+    <button class="tab" data-tab="people" aria-pressed="false">People</button>
+    <button class="tab" data-tab="stakeholders" aria-pressed="false">Stakeholders</button>
+    <button class="tab" data-tab="news" aria-pressed="false">News</button>
+  </div>
+  <main id="view"></main>
+</div>
+
+<script>
+var cards = [], tab = 'play', deck = 'all', game = null;
+var sound = true; try { sound = localStorage.getItem('know.sound') !== 'off'; } catch (e) {}
+function $(id) { return document.getElementById(id); }
+function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+async function json(url, opts) { var r = await fetch(url, Object.assign({ credentials: 'same-origin' }, opts || {})); var p = await r.json().catch(function () { return {}; }); if (!r.ok || p.ok === false) throw new Error((p.error && p.error.message) || 'That did not work.'); return Object.prototype.hasOwnProperty.call(p, 'data') ? p.data : p; }
+async function session() { try { var d = await json('/api/auth/session'); if (d.authenticated) return show(); } catch (e) {} $('gate').classList.remove('hidden'); }
+async function login() { try { await json('/api/auth/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password: $('gate-password').value }) }); show(); } catch (e) { $('gate-error').textContent = e.message; } }
+async function show() { $('gate').classList.add('hidden'); $('app').classList.remove('hidden'); try { cards = await json('/api/know'); } catch (e) { cards = []; } render(); }
+
+// A soft two-note chime for a match. Quiet, short, and it can be turned off.
+var audio = null;
+function chime(good) {
+  if (!sound) return;
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    var notes = good ? [523.25, 659.25] : [261.63];
+    notes.forEach(function (f, i) {
+      var o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime + i * 0.09;
+      o.type = 'sine'; o.frequency.value = f; g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(good ? 0.12 : 0.05, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+      o.connect(g); g.connect(audio.destination); o.start(t); o.stop(t + 0.4);
+    });
+  } catch (e) {}
+}
+
+function pool() { return cards.filter(function (c) { return deck === 'all' || c.deck === deck; }); }
+function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+// Cards that are due come first, then the ones known least.
+function pick(n) {
+  var now = Date.now();
+  var list = pool().slice().sort(function (a, b) { var ad = new Date(a.due_at) <= now ? 0 : 1, bd = new Date(b.due_at) <= now ? 0 : 1; return ad - bd || a.box - b.box || Math.random() - 0.5; });
+  return shuffle(list.slice(0, Math.max(n, Math.min(list.length, n))).slice(0, n));
+}
+function save(answers) { if (!answers.length) return; json('/api/know', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'answer', answers: answers }) }).catch(function () {}); answers.forEach(function (a) { var c = cards.find(function (x) { return x.id === a.id; }); if (c) { c.box = a.right ? Math.min(5, c.box + 1) : 0; c.due_at = new Date(Date.now() + (a.right ? 86400000 : 600000)).toISOString(); } }); }
+
+function deckChips() {
+  var names = { statistics: 'Statistics', pitch: 'My pitch', people: 'People', stakeholders: 'Stakeholders', news: 'News' };
+  var decks = [['all', 'Everything']].concat(Object.keys(names).filter(function (d) { return cards.some(function (c) { return c.deck === d; }); }).map(function (d) { return [d, names[d]]; }));
+  return '<div class="chips">' + decks.map(function (d) { return '<button class="chip" data-deck="' + d[0] + '" aria-pressed="' + (deck === d[0]) + '">' + d[1] + '</button>'; }).join('') + '</div>';
+}
+
+function render() {
+  document.querySelectorAll('.tab').forEach(function (t) { t.setAttribute('aria-pressed', String(t.dataset.tab === tab)); });
+  var v = $('view');
+  if (tab === 'play') {
+    if (game && game.kind === 'match') return renderMatch();
+    if (game && game.kind === 'quick') return renderQuick();
+    v.innerHTML = deckChips() + (pool().length < 4 ? '<div class="panel muted">Your facts are on their way. Check back soon.</div>' :
+      '<div class="games"><button class="game" data-play="match"><strong>Match</strong><span>Tap two tiles that go together. About 3 minutes.</span></button><button class="game" data-play="quick"><strong>Quick pick</strong><span>One question, three answers. Tap one.</span></button></div>') +
+      '<p class="sound" style="margin-top:14px"><label><input type="checkbox" id="sound-toggle"' + (sound ? ' checked' : '') + '> Soft sounds</label></p>';
+    return;
+  }
+  var list = cards.filter(function (c) { return c.deck === tab; });
+  var top = tab === 'news' ? '<div class="row"><span class="muted">New news cards come in every Monday morning.</span><button class="btn soft small" data-news="refresh">Get news now</button></div>' : '';
+  if (!list.length) { v.innerHTML = top + '<div class="panel muted">Nothing here yet.</div>'; return; }
+  var groups = {}; list.forEach(function (c) { (groups[c.topic || 'Other'] = groups[c.topic || 'Other'] || []).push(c); });
+  v.innerHTML = top + Object.keys(groups).map(function (g) {
+    return '<div class="topic">' + esc(g) + '</div>' + groups[g].map(function (c) {
+      return '<div class="card"><div class="big">' + esc(c.answer) + '</div><div class="what">' + esc(c.detail || c.prompt) + '</div>' +
+        (c.who ? '<div class="src">Who: ' + esc(c.who) + '</div>' : '') +
+        (c.source ? '<div class="src">' + (c.source_url ? '<a href="' + esc(c.source_url) + '" target="_blank" rel="noopener">' + esc(c.source) + '</a>' : esc(c.source)) + (c.source_year ? ', ' + esc(c.source_year) : '') + (c.last_checked ? ' · Checked ' + esc(new Date(c.last_checked + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })) : '') + '</div>' : '') +
+        (c.note ? '<div class="note">' + esc(c.note) + '</div>' : '') +
+        '<div style="margin-top:10px;text-align:right"><button class="btn soft small" data-retire="' + esc(c.id) + '">Take out</button></div></div>';
+    }).join('');
+  }).join('');
+}
+
+// Match: each card makes two tiles, its prompt and its answer. Clear the board by matching them.
+function startMatch() {
+  var set = pick(6);
+  var tiles = [];
+  set.forEach(function (c) { tiles.push({ id: c.id, side: 'prompt', text: c.prompt }); tiles.push({ id: c.id, side: 'answer', text: c.answer }); });
+  game = { kind: 'match', set: set, tiles: shuffle(tiles), picked: null, done: {}, missed: {}, left: set.length };
+  renderMatch();
+}
+function renderMatch() {
+  var g = game, v = $('view');
+  if (!g.left) {
+    var answers = g.set.map(function (c) { return { id: c.id, right: !g.missed[c.id] }; }); save(answers);
+    var clean = answers.filter(function (a) { return a.right; }).length;
+    v.innerHTML = '<div class="panel done-box"><strong>Board clear</strong><p class="muted">' + clean + ' of ' + g.set.length + ' on the first try.' + (clean < g.set.length ? ' The others come back sooner.' : '') + '</p><button class="btn" data-play="match">Play again</button> <button class="btn soft" data-play="home">Done</button></div>';
+    game = { kind: 'over' };
+    return;
+  }
+  v.innerHTML = '<div class="row"><span class="muted">' + g.left + ' pairs left</span><button class="btn soft small" data-play="home">Stop</button></div><div class="board">' +
+    g.tiles.map(function (t, i) { return '<button class="tile ' + t.side + (g.done[t.id] ? ' done' : '') + (g.picked === i ? ' picked' : '') + '" data-tile="' + i + '">' + esc(t.text) + '</button>'; }).join('') + '</div>';
+}
+function tapTile(i) {
+  var g = game, t = g.tiles[i];
+  if (!t || g.done[t.id]) return;
+  if (g.picked === null) { g.picked = i; return renderMatch(); }
+  if (g.picked === i) { g.picked = null; return renderMatch(); }
+  var first = g.tiles[g.picked];
+  if (first.id === t.id && first.side !== t.side) {
+    g.done[t.id] = true; g.left -= 1; g.picked = null; chime(true); renderMatch();
+  } else {
+    g.missed[first.id] = true; g.missed[t.id] = true; chime(false);
+    var a = g.picked; g.picked = null; renderMatch();
+    [a, i].forEach(function (k) { var el = document.querySelector('[data-tile="' + k + '"]'); if (el) el.classList.add('miss'); });
+    setTimeout(renderMatch, 450);
+  }
+}
+
+// Quick pick: the right answer and two others from the same group when there are enough.
+function startQuick() {
+  var set = pick(8);
+  game = { kind: 'quick', set: set, i: 0, chosen: null, answers: [], options: [] };
+  makeOptions(); renderQuick();
+}
+function makeOptions() {
+  var c = game.set[game.i]; if (!c) return;
+  var same = pool().filter(function (x) { return x.id !== c.id && x.answer !== c.answer && x.topic === c.topic; });
+  var others = pool().filter(function (x) { return x.id !== c.id && x.answer !== c.answer && x.deck === c.deck && same.indexOf(x) === -1; });
+  var wrong = shuffle(same).concat(shuffle(others)).slice(0, 2);
+  game.options = shuffle([c].concat(wrong)).map(function (x) { return { id: x.id, text: x.answer }; });
+  game.chosen = null;
+}
+function renderQuick() {
+  var g = game, v = $('view'), c = g.set[g.i];
+  if (!c) {
+    save(g.answers);
+    var right = g.answers.filter(function (a) { return a.right; }).length;
+    v.innerHTML = '<div class="panel done-box"><strong>Round done</strong><p class="muted">' + right + ' of ' + g.answers.length + ' right. The ones you missed come back sooner.</p><button class="btn" data-play="quick">Play again</button> <button class="btn soft" data-play="home">Done</button></div>';
+    game = { kind: 'over' };
+    return;
+  }
+  var answered = g.chosen !== null;
+  v.innerHTML = '<div class="row"><span class="muted">' + (g.i + 1) + ' of ' + g.set.length + '</span><button class="btn soft small" data-play="home">Stop</button></div><div class="panel"><div class="q">' + esc(c.prompt) + '</div><div class="opts">' +
+    g.options.map(function (o, k) { var cls = answered ? (o.id === c.id ? ' right' : (k === g.chosen ? ' wrong' : '')) : ''; return '<button class="opt' + cls + '" data-opt="' + k + '"' + (answered ? ' disabled' : '') + '>' + esc(o.text) + '</button>'; }).join('') + '</div>' +
+    (answered ? '<div class="explain">' + esc(c.detail || c.answer) + (c.source ? '<div class="src">' + esc(c.source) + (c.source_year ? ', ' + esc(c.source_year) : '') + '</div>' : '') + (c.note ? '<div class="src">' + esc(c.note) + '</div>' : '') + '</div><div style="margin-top:14px"><button class="btn" data-play="next">Next</button></div>' : '') + '</div>';
+}
+function chooseOption(k) {
+  var g = game, c = g.set[g.i]; if (g.chosen !== null) return;
+  g.chosen = k; var right = g.options[k].id === c.id; chime(right);
+  g.answers.push({ id: c.id, right: right }); renderQuick();
+}
+
+document.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-tab],[data-deck],[data-play],[data-tile],[data-opt],[data-retire],[data-news]'); if (!el) return;
+  if (el.dataset.retire) return retire(el.dataset.retire, el);
+  if (el.dataset.news) return getNews(el);
+  if (el.dataset.tab) { tab = el.dataset.tab; game = null; return render(); }
+  if (el.dataset.deck) { deck = el.dataset.deck; return render(); }
+  if (el.dataset.tile !== undefined) return tapTile(Number(el.dataset.tile));
+  if (el.dataset.opt !== undefined) return chooseOption(Number(el.dataset.opt));
+  var p = el.dataset.play;
+  if (p === 'match') return startMatch();
+  if (p === 'quick') return startQuick();
+  if (p === 'next') { game.i += 1; makeOptions(); return renderQuick(); }
+  if (p === 'home') { if (game && game.kind === 'quick') save(game.answers); game = null; return render(); }
+});
+// Take a card out: it leaves the lists and the games. It can be brought back from the database if needed.
+function retire(id, button) {
+  if (button.dataset.sure !== 'yes') { button.dataset.sure = 'yes'; button.textContent = 'Tap again to take out'; return; }
+  button.disabled = true;
+  json('/api/know', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'retire', id: id }) })
+    .then(function () { cards = cards.filter(function (c) { return c.id !== id; }); render(); })
+    .catch(function () { button.disabled = false; button.textContent = 'Try again'; });
+}
+function getNews(button) {
+  button.disabled = true; button.textContent = 'Finding news...';
+  json('/api/know', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'refresh_news' }) })
+    .then(function (d) { return json('/api/know').then(function (all) { cards = all; render(); if (!d.added) { var m = document.querySelector('[data-news]'); if (m) m.textContent = 'Nothing new yet'; } }); })
+    .catch(function (e) { button.disabled = false; button.textContent = e.message || 'Try again'; });
+}
+document.addEventListener('change', function (e) { if (e.target.id === 'sound-toggle') { sound = e.target.checked; try { localStorage.setItem('know.sound', sound ? 'on' : 'off'); } catch (x) {} } });
+$('gate-password').addEventListener('keydown', function (e) { if (e.key === 'Enter') login(); });
+session();
+</script>
+</body>
+</html>

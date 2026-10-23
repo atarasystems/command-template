@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Setup | Command</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/command-theme.css">
+<script>try{document.documentElement.setAttribute('data-theme',localStorage.getItem('atara-command.theme')==='sea'?'sea':'rooftop')}catch(e){document.documentElement.setAttribute('data-theme','rooftop')}</script>
+<style>
+:root{--bg:var(--cmd-ground,#f6f1f6);--card:var(--cmd-card,#fff);--ink:var(--cmd-ink,#241c2b);--body:var(--cmd-body,#3d3346);--muted:var(--cmd-muted,#6b6274);--line:var(--cmd-line,#e6dde8);--primary:var(--cmd-primary,#5b3f8c);--primary-ink:#fff;--soft:var(--cmd-primary-soft,#efe8f7);--good:#2f7a55;--good-soft:#e6f4ec}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'DM Sans',system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.hidden{display:none!important}
+.wrap{max-width:760px;margin:0 auto;padding:16px 16px 64px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+h1{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:30px;margin:0}
+h2{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:22px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:15px;margin:2px 0 0;line-height:1.45}
+.btn{appearance:none;border:0;border-radius:999px;padding:11px 18px;font:600 15px 'DM Sans',sans-serif;background:var(--primary);color:var(--primary-ink);cursor:pointer;min-height:44px}
+.btn[disabled]{opacity:.6;cursor:default}
+.btn.soft{background:var(--soft);color:var(--primary)}
+.btn.small{padding:8px 14px;min-height:36px;font-size:14px}
+a.btn{text-decoration:none;display:inline-flex;align-items:center}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin-bottom:14px}
+.steps{display:grid;gap:10px}
+.step{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:16px;padding:14px;text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%}
+.step .dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex:none}
+.step.done .dot{background:var(--good);border-color:var(--good);color:#fff}
+.step strong{display:block;font-size:17px}
+.step span.what{color:var(--muted);font-size:14px;line-height:1.4}
+.step .go{margin-left:auto;color:var(--primary);font-weight:700;font-size:14px;white-space:nowrap}
+.bar{height:8px;border-radius:99px;background:var(--soft);overflow:hidden;margin:10px 0 16px}
+.bar i{display:block;height:100%;background:var(--primary);border-radius:99px;transition:width .3s}
+.q{font:600 21px/1.35 'DM Sans',sans-serif;margin:4px 0 6px}
+.help{color:var(--muted);font-size:14px;line-height:1.5;margin:0 0 12px}
+label.field{display:block;margin:0 0 12px}
+label.field span{display:block;font-weight:600;font-size:14px;margin-bottom:6px}
+input[type=text],input[type=email],input[type=url],input[type=password],select,textarea{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;font:inherit;font-size:16px;background:var(--card);color:var(--ink)}
+textarea{min-height:120px;line-height:1.5;resize:vertical}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:14px}
+.days{display:flex;gap:8px;flex-wrap:wrap}
+.day{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 14px;font:600 14px 'DM Sans',sans-serif;color:var(--body);cursor:pointer}
+.day[aria-pressed="true"]{background:var(--soft);color:var(--primary);border-color:var(--primary)}
+.brand{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+.toggle{display:flex;align-items:center;gap:10px;min-height:44px;font-size:15px}
+.toggle input{width:22px;height:22px;accent-color:var(--primary)}
+.check{display:flex;gap:12px;align-items:flex-start;border-top:1px solid var(--line);padding:14px 0}
+.check:first-of-type{border-top:0}
+.badge{font:700 12px 'DM Sans',sans-serif;border-radius:999px;padding:4px 10px;white-space:nowrap}
+.badge.ok{background:var(--good-soft);color:var(--good)}
+.badge.todo{background:var(--soft);color:var(--primary)}
+.check ol{margin:8px 0 0;padding-left:20px;line-height:1.55;font-size:15px;color:var(--body)}
+.check code{background:var(--soft);border-radius:6px;padding:1px 6px;font-size:14px}
+details summary{cursor:pointer;font-weight:700;color:var(--primary)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:999px;font-weight:600;font-size:15px;z-index:9}
+.gate{max-width:360px;margin:20vh auto;padding:24px;background:var(--card);border:1px solid var(--line);border-radius:20px}
+.gate input{margin:10px 0}
+</style>
+<script src="/command-settings.js"></script>
+</head>
+<body>
+<div id="gate" class="gate hidden"><h1>Setup</h1><p class="sub" data-app-name>Command</p><input id="gate-password" type="password" autocomplete="current-password" placeholder="Your Command password"><button class="btn" id="gate-go" type="button">Sign in</button><p class="sub" id="gate-msg"></p></div>
+
+<div id="app" class="wrap hidden">
+  <header class="top">
+    <div><h1>Set up Command</h1><p class="sub">A few plain questions. Command uses your answers everywhere: email replies, LinkedIn drafts, the Funding Scout and your assistant. You can come back and change any answer.</p></div>
+    <a class="btn soft small" href="/?skip-setup=1">Open Command</a>
+  </header>
+
+  <section id="db-panel" class="panel hidden">
+    <h2>First, your database</h2>
+    <p class="help" id="db-msg">Command needs its tables in your new database. This takes about ten seconds and only happens once.</p>
+    <button class="btn" id="db-go" type="button">Create my tables</button>
+  </section>
+
+  <section id="home" class="hidden">
+    <div class="panel">
+      <h2>Your answers</h2>
+      <p class="help" id="progress-text"></p>
+      <div class="bar"><i id="progress-bar" style="width:0"></i></div>
+      <div class="steps" id="steps"></div>
+    </div>
+    <div class="panel" id="checklist"></div>
+  </section>
+
+  <section id="ask" class="panel hidden"></section>
+</div>
+
+<script>
+(function () {
+  'use strict';
+  function $(id) { return document.getElementById(id); }
+  function esc(v) { return String(v == null ? '' : v).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function toast(msg) { var t = document.createElement('div'); t.className = 'toast'; t.textContent = msg; document.body.appendChild(t); setTimeout(function () { t.remove(); }, 2600); }
+  async function json(url, opts) {
+    var r = await fetch(url, Object.assign({ credentials: 'same-origin' }, opts || {}));
+    var p = await r.json().catch(function () { return {}; });
+    if (!r.ok || p.ok === false) throw new Error((p.error && p.error.message) || p.message || 'That did not work. Try again.');
+    return p.data !== undefined ? p.data : p;
+  }
+  function post(url, body) { return json(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }); }
+
+  var DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  var ZONES = (Intl.supportedValuesOf ? Intl.supportedValuesOf('timeZone') : ['America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles', 'America/Phoenix', 'Pacific/Honolulu', 'Europe/London']);
+  function lines(v) { return String(v || '').split(/[\n,]/).map(function (x) { return x.trim(); }).filter(Boolean); }
+
+  // Each section is a short run of questions, one per screen. Answers save when the section is done.
+  var SECTIONS = [
+    { key: 'founder', title: 'About you', what: 'Your name, title and email.', qs: [
+      { k: 'name', q: 'What is your full name?', type: 'text', ph: 'Maya Rivers' },
+      { k: 'first_name', q: 'What should Command call you?', help: 'Your first name or nickname. It shows in greetings and on tasks.', type: 'text', ph: 'Maya' },
+      { k: 'title', q: 'What is your title?', type: 'text', ph: 'Founder and CEO' },
+      { k: 'email', q: 'What email should your morning brief go to?', type: 'email', ph: 'you@yourcompany.com' },
+      { k: 'signoff', q: 'How do you sign your emails?', help: 'Just the name at the bottom, for example "Maya".', type: 'text', ph: 'Maya' },
+      { k: 'bio', q: 'Tell Command a little about you.', help: 'A few lines: your background and what shapes how you build. Command uses this when it writes for you. One fact per line works well.', type: 'area', ph: 'Former teacher\nBuilds tools for small bakeries' },
+    ] },
+    { key: 'company', title: 'Your company', what: 'Name, what it does, and where it is.', qs: [
+      { k: 'name', q: 'What is your company called?', type: 'text', ph: 'Northwind Studio' },
+      { k: 'short_name', q: 'Is there a shorter name you use?', help: 'Optional. It shows at the top of Command.', type: 'text', ph: 'Northwind' },
+      { k: 'legal_name', q: 'What is the legal name?', help: 'As it appears on your registration, for grant forms.', type: 'text', ph: 'Northwind Studio LLC' },
+      { k: 'entity_type', q: 'What kind of business is it?', type: 'select', options: ['for-profit LLC', 'corporation', 'sole proprietor', 'nonprofit (501(c)(3))', 'other'] },
+      { k: 'state', q: 'Which state is it registered in?', type: 'text', ph: 'Ohio' },
+      { k: 'one_liner', q: 'In one sentence, what does your company do?', type: 'text', ph: 'Ordering software for small bakeries.' },
+      { k: 'mission', q: 'What is your mission?', help: 'One or two sentences. Grant forms ask for this.', type: 'area', ph: '' },
+      { k: 'website', q: 'What is your website?', type: 'text', ph: 'northwind.example' },
+      { k: 'facts', q: 'Anything else every helper should know?', help: 'Prices, programs, partners, or how you describe your work. One fact per line. Leave out anything private.', type: 'area', ph: '' },
+      { k: 'private_topics', q: 'What should never be shared in replies?', help: 'Command keeps these out of every draft.', type: 'area', ph: 'User counts, revenue, funding details' },
+    ] },
+    { key: 'brands', title: 'Brands and products', what: 'Each product or brand you run.', qs: [ { k: 'list', q: 'What products or brands do you run?', help: 'Add one row for each. The short code (2 to 6 letters) tags updates and LinkedIn posts.', type: 'brands' } ] },
+    { key: 'audience', title: 'Who you serve', what: 'Your customers, their problems, and what you believe.', qs: [
+      { k: 'who', q: 'Who do you serve?', help: 'Describe the people or organizations you build for.', type: 'area', ph: 'Owners of small bakeries with one to three locations' },
+      { k: 'problems', q: 'What problems do they have that you solve?', type: 'area', ph: '' },
+      { k: 'beliefs', q: 'What do you believe that others in your field do not?', help: 'These make your best LinkedIn posts. One per line.', type: 'area', ph: 'Small shops deserve the same tools as chains' },
+      { k: 'frameworks', q: 'Do you teach any named methods or frameworks?', help: 'Optional. One per line with a short description.', type: 'area', ph: '' },
+      { k: 'offers', q: 'What do you offer, and what word can people DM you for it?', help: 'For example: "A free menu review. DM me MENU."', type: 'area', ph: '' },
+      { k: 'news_topics', q: 'What news should Know it follow for you?', help: 'Two to five short search phrases, one per line.', type: 'list', ph: 'bakery industry\nsmall business payments' },
+    ] },
+    { key: 'funding', title: 'Funding profile', what: 'What the Funding Scout looks for.', qs: [
+      { k: 'stage', q: 'What stage is your company at?', type: 'select', options: ['idea', 'pre-revenue', 'pre-seed', 'seed', 'growing'] },
+      { k: 'revenue', q: 'About how much revenue do you make in a year?', help: 'A rough number is fine, like "$2,000" or "$40k". The Scout skips programs with a higher revenue floor.', type: 'text', ph: '$2,000' },
+      { k: 'location', q: 'Where are you based?', type: 'text', ph: 'Columbus, Ohio' },
+      { k: 'regions', q: 'Which places can you apply from?', help: 'Your state and any nearby areas. Nationwide programs are always included.', type: 'text', ph: 'Ohio' },
+      { k: 'founder_background', q: 'What about your background matters for funding?', help: 'For example years in your field, or what led you to start.', type: 'area', ph: '' },
+      { k: 'eligible_groups', q: 'Which founder groups do you belong to?', help: 'Many grants are for specific groups, such as women, veterans, or first-generation founders. List only the ones you want the Scout to search for.', type: 'text', ph: 'women, veterans' },
+      { k: 'programs_won', q: 'Which programs have you already won or joined?', type: 'area', ph: '' },
+      { k: 'credentials', q: 'Which registrations do you have?', help: 'For example SAM.gov or a state small business certification. Leave out ID numbers.', type: 'area', ph: '' },
+      { k: 'search_queries', q: 'Any searches you want the Scout to run?', help: 'Optional. One per line. Without these, the Scout builds searches from your answers.', type: 'list', ph: 'Ohio food business grant\nwomen founder pitch competition' },
+      { k: 'federal_keywords', q: 'Any words to search federal grants for?', help: 'Optional. One per line, for Grants.gov.', type: 'list', ph: 'food safety technology' },
+    ] },
+    { key: 'schedule', title: 'Your week', what: 'Time zone, workdays and post days.', qs: [
+      { k: 'time_zone', q: 'What time zone are you in?', type: 'zone' },
+      { k: 'workdays', q: 'Which days do you work?', type: 'days' },
+      { k: 'rest_days', q: 'Which days stay clear?', help: 'Command keeps these free of reminders.', type: 'days' },
+      { k: 'weekly_review_day', q: 'Which day should your week in review be ready?', type: 'day' },
+      { k: 'linkedin_post_days', q: 'Which three days do you post on LinkedIn?', type: 'days', max: 3 },
+    ] },
+    { key: 'voice', title: 'Your writing voice', what: 'How Command should sound when it writes for you.', qs: [
+      { k: 'samples', q: 'Paste some of your own writing.', help: 'A few emails or posts you wrote yourself. Command learns your voice from these and never copies them.', type: 'area', ph: '' },
+      { k: 'rules', q: 'Here is how you write. Change anything that is off.', help: 'Press "Write my voice rules" to draft these from your samples, then edit freely. One rule per line.', type: 'voice' },
+      { k: 'no_dashes', q: 'Should Command leave out long dashes?', type: 'toggle', label: 'Yes, never use em dashes or en dashes' },
+      { k: 'reading_level', q: 'What reading level should drafts aim for?', help: 'Optional. For example "5th grade" or "plain and simple".', type: 'text', ph: '' },
+      { k: 'banned_words', q: 'Any words Command should never use?', help: 'One per line or separated by commas.', type: 'list', ph: 'synergy\ngame-changer' },
+    ] },
+    { key: 'links', title: 'Your links', what: 'Booking link and more.', qs: [
+      { k: 'booking_url', q: 'Do you have a booking link for short calls?', help: 'Starts with https://. Command offers it when someone wants to connect.', type: 'url', ph: 'https://' },
+      { k: 'booking_label', q: 'What do you call that call?', type: 'text', ph: 'intro call' },
+      { k: 'demo_url', q: 'Do you have a demo link for investors?', help: 'Optional. Command only offers it to investors and partners.', type: 'url', ph: 'https://' },
+      { k: 'linkedin_url', q: 'What is your LinkedIn profile?', type: 'url', ph: 'https://www.linkedin.com/in/' },
+    ] },
+    { key: 'assistant', title: 'Your assistant', what: 'Give your assistant a name.', qs: [ { k: 'name', q: 'What should your assistant be called?', type: 'text', ph: 'River' } ] },
+    { key: 'modules', title: 'Areas to show', what: 'Turn areas of Command on or off.', qs: [
+      { k: 'money', q: 'Show the Money area?', help: 'Bookkeeping, cash and receipts. Money amounts never show on Today.', type: 'toggle', label: 'Yes, show Money' },
+      { k: 'updates', q: 'Show Updates?', help: 'A short daily log that builds your week in review.', type: 'toggle', label: 'Yes, show Updates' },
+      { k: 'funding', q: 'Show Funding?', type: 'toggle', label: 'Yes, show Funding' },
+      { k: 'linkedin', q: 'Write LinkedIn drafts each week?', type: 'toggle', label: 'Yes, draft three posts a week' },
+    ] },
+  ];
+
+  var state = { settings: null, completed: [], section: null, i: 0, draft: {} };
+
+  async function session() { try { var d = await json('/api/auth/session'); if (d.authenticated) return start(); } catch (e) {} $('gate').classList.remove('hidden'); $('gate-password').focus(); }
+  async function login() {
+    try { await post('/api/auth/login', { password: $('gate-password').value }); start(); }
+    catch (e) { $('gate-msg').textContent = 'That password did not match. Try again.'; }
+  }
+
+  async function start() {
+    $('gate').classList.add('hidden'); $('app').classList.remove('hidden');
+    var db = await json('/api/setup/database').catch(function () { return { ready: false }; });
+    state.keys = db.keys || {};
+    if (!db.ready) {
+      $('db-panel').classList.remove('hidden');
+      if (!db.database_connected || !db.can_create) {
+        $('db-msg').textContent = 'Command cannot reach your database yet. In Vercel, open this project, go to Storage, connect Supabase, then redeploy. Come back here after that.';
+        $('db-go').classList.add('hidden');
+      }
+      renderChecklist();
+      return;
+    }
+    await loadSettings();
+    home();
+  }
+
+  async function createTables() {
+    var b = $('db-go'); b.disabled = true; b.textContent = 'Creating your tables...';
+    try { await post('/api/setup/database', {}); toast('Your database is ready.'); $('db-panel').classList.add('hidden'); await loadSettings(); home(); }
+    catch (e) { b.disabled = false; b.textContent = 'Try again'; $('db-msg').textContent = e.message; }
+  }
+
+  async function loadSettings() {
+    var d = await json('/api/settings');
+    state.settings = d.settings; state.completed = d.settings.completed || [];
+  }
+
+  function home() {
+    $('ask').classList.add('hidden'); $('home').classList.remove('hidden');
+    var done = SECTIONS.filter(function (s) { return state.completed.indexOf(s.key) !== -1; }).length;
+    $('progress-text').textContent = done === SECTIONS.length ? 'All set. Change any answer whenever you like.' : done + ' of ' + SECTIONS.length + ' done. Start with the first one that is open.';
+    $('progress-bar').style.width = Math.round(done / SECTIONS.length * 100) + '%';
+    $('steps').innerHTML = SECTIONS.map(function (s, n) {
+      var ok = state.completed.indexOf(s.key) !== -1;
+      return '<button type="button" class="step' + (ok ? ' done' : '') + '" data-open="' + s.key + '"><span class="dot">' + (ok ? '&#10003;' : (n + 1)) + '</span><span><strong>' + esc(s.title) + '</strong><span class="what">' + esc(s.what) + '</span></span><span class="go">' + (ok ? 'Change' : 'Start') + '</span></button>';
+    }).join('');
+    renderChecklist();
+    window.scrollTo({ top: 0 });
+  }
+
+  function openSection(key) {
+    var s = SECTIONS.filter(function (x) { return x.key === key; })[0]; if (!s) return;
+    state.section = s; state.i = 0;
+    state.draft = JSON.parse(JSON.stringify((state.settings && state.settings[key]) || {}));
+    $('home').classList.add('hidden'); $('ask').classList.remove('hidden');
+    renderQuestion();
+  }
+
+  function fieldFor(q, value) {
+    var id = 'ans';
+    if (q.type === 'area' || q.type === 'voice') return '<textarea id="' + id + '" placeholder="' + esc(q.ph || '') + '">' + esc(value || '') + '</textarea>' + (q.type === 'voice' ? '<div class="row" style="justify-content:flex-start"><button type="button" class="btn soft small" data-act="voice">Write my voice rules</button></div>' : '');
+    if (q.type === 'list') return '<textarea id="' + id + '" placeholder="' + esc(q.ph || '') + '">' + esc((value || []).join('\n')) + '</textarea>';
+    if (q.type === 'select') return '<select id="' + id + '"><option value="">Choose one</option>' + q.options.map(function (o) { return '<option' + (o === value ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select>';
+    if (q.type === 'zone') { var guess = value || Intl.DateTimeFormat().resolvedOptions().timeZone; return '<select id="' + id + '">' + ZONES.map(function (z) { return '<option' + (z === guess ? ' selected' : '') + '>' + esc(z) + '</option>'; }).join('') + '</select>'; }
+    if (q.type === 'days' || q.type === 'day') { var picked = q.type === 'day' ? [Number(value)] : (value || []).map(Number); return '<div class="days" id="' + id + '" data-single="' + (q.type === 'day') + '" data-max="' + (q.max || 7) + '">' + DAYS.map(function (d, n) { return '<button type="button" class="day" data-day="' + n + '" aria-pressed="' + (picked.indexOf(n) !== -1) + '">' + d + '</button>'; }).join('') + '</div>'; }
+    if (q.type === 'toggle') return '<label class="toggle"><input id="' + id + '" type="checkbox"' + (value === true || (value === undefined && q.k !== 'money' && q.k !== 'no_dashes') ? ' checked' : '') + '>' + esc(q.label) + '</label>';
+    if (q.type === 'brands') {
+      var list = (value && value.length) ? value : [{}];
+      return '<div id="ans">' + list.map(brandRow).join('') + '</div><button type="button" class="btn soft small" data-act="add-brand">Add another</button>';
+    }
+    return '<input id="' + id + '" type="' + (q.type === 'email' ? 'email' : q.type === 'url' ? 'url' : 'text') + '" value="' + esc(value || '') + '" placeholder="' + esc(q.ph || '') + '">';
+  }
+  function brandRow(b) {
+    b = b || {};
+    return '<div class="brand"><label class="field"><span>Name</span><input type="text" data-b="name" value="' + esc(b.name || '') + '" placeholder="Northwind Orders"></label>' +
+      '<label class="field"><span>Short code</span><input type="text" data-b="code" maxlength="6" value="' + esc(b.code || '') + '" placeholder="NW"></label>' +
+      '<label class="field"><span>What it is, in one line</span><input type="text" data-b="one_liner" value="' + esc(b.one_liner || '') + '" placeholder="Online ordering for bakeries"></label>' +
+      '<label class="field"><span>Who it is for</span><input type="text" data-b="audience" value="' + esc(b.audience || '') + '" placeholder="Bakery owners"></label>' +
+      '<label class="field"><span>Other facts (optional, one per line)</span><textarea data-b="facts" style="min-height:70px">' + esc(b.facts || '') + '</textarea></label>' +
+      '<button type="button" class="btn soft small" data-act="remove-brand">Remove</button></div>';
+  }
+
+  function readAnswer(q) {
+    var el = $('ans'); if (!el) return undefined;
+    if (q.type === 'list') return lines(el.value);
+    if (q.type === 'toggle') return el.checked;
+    if (q.type === 'days') return Array.prototype.map.call(el.querySelectorAll('[aria-pressed="true"]'), function (b) { return Number(b.dataset.day); });
+    if (q.type === 'day') { var p = el.querySelector('[aria-pressed="true"]'); return p ? Number(p.dataset.day) : 5; }
+    if (q.type === 'brands') return Array.prototype.map.call(el.querySelectorAll('.brand'), function (row) { var b = {}; row.querySelectorAll('[data-b]').forEach(function (i) { b[i.dataset.b] = i.value.trim(); }); return b; }).filter(function (b) { return b.name; });
+    return String(el.value || '').trim();
+  }
+
+  function renderQuestion() {
+    var s = state.section, q = s.qs[state.i];
+    $('ask').innerHTML = '<p class="help" style="margin:0 0 4px">' + esc(s.title) + ' · ' + (state.i + 1) + ' of ' + s.qs.length + '</p>' +
+      '<div class="bar"><i style="width:' + Math.round((state.i + 1) / s.qs.length * 100) + '%"></i></div>' +
+      '<div class="q">' + esc(q.q) + '</div>' + (q.help ? '<p class="help">' + esc(q.help) + '</p>' : '') +
+      fieldFor(q, state.draft[q.k]) +
+      '<div class="row"><button type="button" class="btn soft" data-act="back">' + (state.i === 0 ? 'Back to the list' : 'Back') + '</button>' +
+      '<button type="button" class="btn" data-act="next">' + (state.i === s.qs.length - 1 ? 'Save this section' : 'Next') + '</button></div>';
+    var input = $('ask').querySelector('input[type=text],input[type=email],input[type=url],textarea,select'); if (input) input.focus();
+  }
+
+  async function next() {
+    var s = state.section, q = s.qs[state.i];
+    state.draft[q.k] = readAnswer(q);
+    if (q.k === 'name' && s.key === 'founder' && !state.draft.first_name) state.draft.first_name = String(state.draft.name || '').split(/\s+/)[0];
+    if (state.i < s.qs.length - 1) { state.i += 1; renderQuestion(); return; }
+    var btn = $('ask').querySelector('[data-act=next]'); btn.disabled = true; btn.textContent = 'Saving...';
+    try {
+      var value = s.key === 'brands' ? { list: state.draft.list || [] } : state.draft;
+      await post('/api/settings', { section: s.key, value: value });
+      await loadSettings();
+      if (window.CommandSettings) await window.CommandSettings.load();
+      toast(s.title + ' saved.');
+      home();
+    } catch (e) { btn.disabled = false; btn.textContent = 'Save this section'; toast(e.message); }
+  }
+
+  async function draftVoice() {
+    var samples = state.draft.samples || '';
+    var b = $('ask').querySelector('[data-act=voice]'); b.disabled = true; b.textContent = 'Reading your writing...';
+    try {
+      var out = await post('/api/settings', { action: 'draft_voice', samples: samples });
+      $('ans').value = out.rules;
+      if (out.reading_level && !state.draft.reading_level) state.draft.reading_level = out.reading_level;
+      if (!out.uses_long_dashes && state.draft.no_dashes === undefined) state.draft.no_dashes = true;
+      toast('Here is a draft. Change anything that is off.');
+    } catch (e) { toast(e.message); }
+    b.disabled = false; b.textContent = 'Write my voice rules';
+  }
+
+  // Steps outside Command: keys and connections, with plain instructions.
+  function renderChecklist() {
+    var k = state.keys || {};
+    function item(ok, title, body, optional) {
+      return '<div class="check"><span class="badge ' + (ok ? 'ok' : 'todo') + '">' + (ok ? 'Connected' : optional ? 'Optional' : 'To do') + '</span><div><strong>' + title + '</strong>' + (ok ? '' : body) + '</div></div>';
+    }
+    var addKey = function (name) { return '<li>In Vercel, open this project, then <strong>Settings</strong>, then <strong>Environment Variables</strong>.</li><li>Add <code>' + name + '</code> with the value you copied, for all environments.</li><li>Open <strong>Deployments</strong>, press the three dots on the newest one, and choose <strong>Redeploy</strong>.</li>'; };
+    $('checklist').innerHTML = '<h2>Connections outside Command</h2><p class="help">These live in your own accounts. Each one shows Connected once Command can see it.</p>' +
+      item(k.gemini, 'AI key (Google Gemini)', '<ol><li>Go to <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">aistudio.google.com/apikey</a> and sign in with Google.</li><li>Press <strong>Create API key</strong> and copy it.</li>' + addKey('GEMINI_API_KEY') + '</ol>') +
+      item(k.google, 'Gmail and Calendar', '<details><summary>Show the steps (about 15 minutes)</summary><ol>' +
+        '<li>Go to <a href="https://console.cloud.google.com/" target="_blank" rel="noopener">console.cloud.google.com</a> and create a project named "Command".</li>' +
+        '<li>Open <strong>APIs and Services</strong>, then <strong>Library</strong>. Turn on <strong>Gmail API</strong> and <strong>Google Calendar API</strong>.</li>' +
+        '<li>Open <strong>OAuth consent screen</strong>. Choose <strong>External</strong>, fill in the app name and your email, and add yourself as a <strong>Test user</strong>.</li>' +
+        '<li>Open <strong>Credentials</strong>, press <strong>Create credentials</strong>, then <strong>OAuth client ID</strong>. Choose <strong>Web application</strong>. Under Authorized redirect URIs add <code>https://developers.google.com/oauthplayground</code>. Copy the Client ID and Client secret.</li>' +
+        '<li>Go to <a href="https://developers.google.com/oauthplayground" target="_blank" rel="noopener">the OAuth Playground</a>. Press the gear icon, check <strong>Use your own OAuth credentials</strong>, and paste your Client ID and secret.</li>' +
+        '<li>In the scope box, enter <code>https://mail.google.com/ https://www.googleapis.com/auth/calendar</code>, press <strong>Authorize APIs</strong>, and sign in.</li>' +
+        '<li>Press <strong>Exchange authorization code for tokens</strong> and copy the <strong>Refresh token</strong>.</li>' +
+        '<li>In Vercel, add <code>GOOGLE_CLIENT_ID</code>, <code>GOOGLE_CLIENT_SECRET</code> and <code>GOOGLE_REFRESH_TOKEN</code>, then redeploy.</li>' +
+        '<li>Back on the OAuth consent screen, press <strong>Publish app</strong> so the connection stays on after 7 days.</li></ol></details>') +
+      item(k.serper, 'Web search for the Funding Scout (Serper)', '<ol><li>Go to <a href="https://serper.dev" target="_blank" rel="noopener">serper.dev</a> and sign up. The free credits cover a few months.</li><li>Copy your API key.</li>' + addKey('SERPER_API_KEY') + '</ol>', true) +
+      item(k.resend, 'Morning brief email (Resend)', '<ol><li>Go to <a href="https://resend.com" target="_blank" rel="noopener">resend.com</a> and sign up.</li><li>Create an API key and copy it.</li>' + addKey('RESEND_API_KEY') + '<li>To send from your own address, verify your domain in Resend and add <code>RESEND_FROM_EMAIL</code>, such as <code>Assistant &lt;brief@yourcompany.com&gt;</code>.</li></ol>', true);
+  }
+
+  document.addEventListener('click', function (e) {
+    var open = e.target.closest('[data-open]'); if (open) { openSection(open.dataset.open); return; }
+    var act = e.target.closest('[data-act]'); if (!act) { var day = e.target.closest('.day'); if (day) toggleDay(day); return; }
+    var a = act.dataset.act;
+    if (a === 'next') next();
+    else if (a === 'back') { var q = state.section.qs[state.i]; state.draft[q.k] = readAnswer(q); if (state.i === 0) home(); else { state.i -= 1; renderQuestion(); } }
+    else if (a === 'voice') draftVoice();
+    else if (a === 'add-brand') $('ans').insertAdjacentHTML('beforeend', brandRow({}));
+    else if (a === 'remove-brand') { act.closest('.brand').remove(); }
+  });
+  function toggleDay(btn) {
+    var box = btn.parentNode, single = box.dataset.single === 'true', max = Number(box.dataset.max || 7);
+    if (single) { box.querySelectorAll('.day').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); }); btn.setAttribute('aria-pressed', 'true'); return; }
+    var on = btn.getAttribute('aria-pressed') === 'true';
+    if (!on && box.querySelectorAll('[aria-pressed="true"]').length >= max) { toast('Pick up to ' + max + '.'); return; }
+    btn.setAttribute('aria-pressed', on ? 'false' : 'true');
+  }
+  $('gate-go').addEventListener('click', login);
+  $('gate-password').addEventListener('keydown', function (e) { if (e.key === 'Enter') login(); });
+  $('db-go').addEventListener('click', createTables);
+  session();
+})();
+</script>
+</body>
+</html>

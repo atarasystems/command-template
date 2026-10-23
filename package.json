@@ -1,0 +1,16 @@
+{
+  "name": "command",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "dev": "npx vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.109.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.11"
+  }
+}
