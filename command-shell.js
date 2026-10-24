@@ -14,11 +14,12 @@
     { id: 'people', label: 'People', icon: '<circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c.8-3.6 3.4-5.5 6.5-5.5s5.7 1.9 6.5 5.5"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .7 3.2 2.4 3.5 5.2"></path>', panels: ['cmd-people', 'panel-relationship-desk', 'panel-email-desk', 'panel-contacts-full', 'panel-email-intelligence', 'panel-weekly-review', 'panel-audience'] },
     { id: 'partnerships', label: 'Partnerships', icon: '<path d="M3 21h18M5 21V7l7-4 7 4v14"></path><path d="M9 21v-5h6v5M9 10h.01M15 10h.01"></path>', panels: ['cmd-partnerships', 'panel-opportunity-hub', 'panel-revenue-crm'] },
     { id: 'funding', label: 'Funding', icon: '<path d="M12 2v20M17 5.5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>', panels: ['cmd-funding'] },
-    { id: 'work', label: 'Work', icon: '<path d="M9 6h11M9 12h11M9 18h11"></path><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"></path>', panels: ['cmd-work', 'panel-focus', 'panel-projects', 'panel-actions', 'panel-tickler', 'panel-calendar', 'panel-ai-team'] },
+    { id: 'work', label: 'Work', icon: '<path d="M9 6h11M9 12h11M9 18h11"></path><path d="m3 6 1.5 1.5L7 5M3 12l1.5 1.5L7 11M3 18l1.5 1.5L7 17"></path>', panels: ['cmd-work', 'panel-focus', 'panel-projects', 'panel-actions', 'panel-tickler', 'panel-ai-team'] },
+    { id: 'calendar', label: 'Calendar', icon: '<rect x="3" y="4.5" width="18" height="16" rx="2.5"></rect><path d="M3 9.5h18M8 2.5v4M16 2.5v4"></path>', panels: ['panel-calendar'] },
     { id: 'money', label: 'Money', icon: '<rect x="2.5" y="6" width="19" height="13" rx="2.5"></rect><path d="M2.5 10h19M7 15h3"></path>', panels: ['cmd-money'] },
     { id: 'news', label: 'News & Notes', icon: '<path d="M4 5h16v11H8l-4 4z"></path><path d="M8 9h8M8 12h5"></path>', panels: ['cmd-news', 'panel-intelligence', 'panel-knowledge', 'panel-prompt-library', 'panel-morning-brief'] }
   ];
-  // Areas the founder switched off in setup stay out of the menu. Money starts off until they turn it on.
+  // Areas the founder switched off in setup stay out of the menu.
   var settings = window.CommandSettings;
   var PAGES = ALL_PAGES.filter(function (p) { return !settings || settings.moduleOn(p.id); });
 
@@ -330,7 +331,7 @@
       areaCard('people', 'People', drafts ? drafts + ' to approve' : followUps ? followUps + ' follow-ups' : contacts.length + ' contacts', drafts > 0 || followUps > 0, 'Relationships, email drafts and follow-ups in one place.') +
       areaCard('partnerships', 'Partnerships', 'Organizations', false, 'Partners, consulting, subcontracting and deals with organizations.') +
       areaCard('funding', 'Funding', fundingPill(), fundingSoon() > 0, 'Grants, programs and applications, with deadlines first.') +
-      areaCard('work', 'Work', work.length + ' open', overdue > 0, overdue ? overdue + ' past their date. Pick what still matters.' : 'Projects, tickler and calendar.') +
+      areaCard('work', 'Work', work.length + ' open', overdue > 0, overdue ? overdue + ' past their date. Pick what still matters.' : 'Projects and tickler.') +
       // Today never shows dollar amounts, so Command is safe to open around other people. Amounts live on the Money page.
       (settings && !settings.moduleOn('money') ? '' : areaCard('money', 'Money', s && s.missing_evidence ? s.missing_evidence + ' receipts' : 'Books', !!(s && s.missing_evidence), 'Cash, runway and receipts live on the Money page.'));
   }

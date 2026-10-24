@@ -14,7 +14,7 @@ const PERSONAL = /Solei|Atara|SpectrumThrive|SCOPE|Sky Harper|Maryland|TEDCO|sol
 test('empty settings fall back to safe defaults with nothing personal in them', () => {
   const s = settingsFromRows([]);
   assert.deepEqual(s.completed, []);
-  assert.equal(s.modules.money, false, 'Money starts hidden');
+  assert.equal(s.modules.money, true, 'Money starts on');
   assert.doesNotMatch(knowledgeText(s), PERSONAL);
   assert.doesNotMatch(JSON.stringify(DEFAULT_SETTINGS), PERSONAL);
   assert.ok(setupStatus(s).every((x) => x.done === false));

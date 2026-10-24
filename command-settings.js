@@ -20,6 +20,7 @@
       document.querySelectorAll('[data-founder-first-name]').forEach(function (el) { el.textContent = root.founderLabel ? root.founderLabel() : api.firstName(); });
       document.querySelectorAll('[data-assistant-name]').forEach(function (el) { el.textContent = api.assistant(); });
       document.querySelectorAll('[data-company-name]').forEach(function (el) { el.textContent = api.company(); });
+      document.querySelectorAll('[data-tz-label]').forEach(function (el) { el.textContent = api.tzLabel(); });
       document.querySelectorAll('[data-app-name]').forEach(function (el) { el.textContent = api.appName(); });
       try { document.dispatchEvent(new CustomEvent('command:settings', { detail: current })); } catch (e) { /* old browser */ }
     }
@@ -28,12 +29,15 @@
   var api = {
     get: function () { return current; },
     tz: function () { return root.CMD_TZ || 'America/New_York'; },
+    tzLabel: function () {
+      try { var p = new Intl.DateTimeFormat('en-US', { timeZone: api.tz(), timeZoneName: 'long' }).formatToParts(new Date()); return p.filter(function (x) { return x.type === 'timeZoneName'; })[0].value; } catch (e) { return api.tz(); }
+    },
     firstName: function () { var f = (current && current.founder) || {}; return f.first_name || String(f.name || '').split(/\s+/)[0] || 'there'; },
     assistant: function () { return (current && current.assistant && current.assistant.name) || 'River'; },
     company: function () { var c = (current && current.company) || {}; return c.short_name || c.name || 'your company'; },
     appName: function () { var c = (current && current.company) || {}; return (c.short_name || c.name) ? (c.short_name || c.name) + ' Command' : 'Command'; },
     brands: function () { return ((current && current.brands && current.brands.list) || []).filter(function (b) { return b && (b.name || b.code); }); },
-    moduleOn: function (key) { var m = (current && current.modules) || {}; return m[key] !== false && !(key === 'money' && m.money !== true); },
+    moduleOn: function (key) { var m = (current && current.modules) || {}; return m[key] !== false; },
     setupDone: function () { return Boolean(current && current.completed && current.completed.indexOf('founder') !== -1 && current.completed.indexOf('company') !== -1); },
     load: function () {
       return fetch('/api/settings', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (p) {

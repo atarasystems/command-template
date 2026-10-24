@@ -241,7 +241,7 @@ details summary{cursor:pointer;font-weight:700;color:var(--primary)}
     if (q.type === 'select') return '<select id="' + id + '"><option value="">Choose one</option>' + q.options.map(function (o) { return '<option' + (o === value ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select>';
     if (q.type === 'zone') { var guess = value || Intl.DateTimeFormat().resolvedOptions().timeZone; return '<select id="' + id + '">' + ZONES.map(function (z) { return '<option' + (z === guess ? ' selected' : '') + '>' + esc(z) + '</option>'; }).join('') + '</select>'; }
     if (q.type === 'days' || q.type === 'day') { var picked = q.type === 'day' ? [Number(value)] : (value || []).map(Number); return '<div class="days" id="' + id + '" data-single="' + (q.type === 'day') + '" data-max="' + (q.max || 7) + '">' + DAYS.map(function (d, n) { return '<button type="button" class="day" data-day="' + n + '" aria-pressed="' + (picked.indexOf(n) !== -1) + '">' + d + '</button>'; }).join('') + '</div>'; }
-    if (q.type === 'toggle') return '<label class="toggle"><input id="' + id + '" type="checkbox"' + (value === true || (value === undefined && q.k !== 'money' && q.k !== 'no_dashes') ? ' checked' : '') + '>' + esc(q.label) + '</label>';
+    if (q.type === 'toggle') return '<label class="toggle"><input id="' + id + '" type="checkbox"' + (value === true || (value === undefined && q.k !== 'no_dashes') ? ' checked' : '') + '>' + esc(q.label) + '</label>';
     if (q.type === 'brands') {
       var list = (value && value.length) ? value : [{}];
       return '<div id="ans">' + list.map(brandRow).join('') + '</div><button type="button" class="btn soft small" data-act="add-brand">Add another</button>';

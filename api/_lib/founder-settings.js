@@ -29,8 +29,8 @@ export const DEFAULT_SETTINGS = Object.freeze({
   },
   links: { booking_url: '', booking_label: 'intro call', demo_url: '', linkedin_url: '' },
   assistant: { name: 'River' },
-  // Areas a founder can switch on or off. Money starts off so it stays private until they want it.
-  modules: { money: false, updates: true, linkedin: true, funding: true, know: true },
+  // Areas a founder can switch on or off. Every area starts on. Money amounts never show on Today.
+  modules: { money: true, updates: true, linkedin: true, funding: true, know: true },
 });
 
 const CACHE_MS = 60_000;

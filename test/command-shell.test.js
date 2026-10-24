@@ -17,7 +17,7 @@ test('Command loads the shell and the theme layer, Rooftop Sunrise by default', 
 
 test('The side menu has the founder areas and every key panel has a home', () => {
   for (const label of ['SCOPE', 'Content']) assert.ok(!shell.includes(`label: '${label}'`), `${label} is Atara-only`);
-  for (const label of ['Today', 'Email', 'Updates', 'People', 'Partnerships', 'Funding', 'Work', 'Money', 'News & Notes']) assert.ok(shell.includes(`label: '${label}'`), label);
+  for (const label of ['Today', 'Email', 'Updates', 'People', 'Partnerships', 'Funding', 'Work', 'Calendar', 'Money', 'News & Notes']) assert.ok(shell.includes(`label: '${label}'`), label);
   for (const id of ['panel-relationship-desk', 'panel-email-desk', 'panel-contacts-full', 'panel-revenue-crm', 'panel-projects', 'panel-actions', 'panel-tickler', 'panel-calendar', 'panel-intelligence', 'panel-knowledge']) {
     assert.ok(shell.includes(`'${id}'`), id);
   }
@@ -57,4 +57,11 @@ test('LinkedIn drafts live on Work, Money follows its setting, and new founders 
   assert.match(shell, /settings\.moduleOn\(p\.id\)/);
   assert.match(shell, /window\.location\.href = '\/setup\.html'/);
   assert.doesNotMatch(shell, /Solei|SCOPE|Atara Command/);
+});
+
+test('Calendar has its own page and shows the founder time zone', () => {
+  assert.match(shell, /id: 'calendar', label: 'Calendar'[^\n]*panels: \['panel-calendar'\]/);
+  const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(html, /data-tz-label/);
+  assert.doesNotMatch(html, />Eastern Time</);
 });
