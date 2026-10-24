@@ -47,7 +47,7 @@ are daily or weekly. Email also has a **Check now** button for anything sooner.
 | `/api/cron/funding` | 12:30 daily | Deadline reminders, then searches for new funding |
 | `/api/cron/reviews` | 21:45 daily | Week in review on Fridays, month in review on the 1st |
 | `/api/cron/linkedin-week` | 21:00 Fridays | Drafts next week's three LinkedIn posts |
-| `/api/cron/know-news` | 11:05 Mondays | New Know it news cards |
+| `/api/cron/know-news` | 11:05 daily | New Know it news cards each morning |
 
 On Vercel Pro, email sorting can run every 30 minutes: change its schedule to `*/30 * * * *`.
 

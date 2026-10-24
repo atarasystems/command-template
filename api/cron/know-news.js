@@ -4,7 +4,7 @@ import { refreshNews } from '../_lib/know-news.js';
 
 export const maxDuration = 120;
 
-// Monday morning: a fresh batch of news cards for Know it, on the topics the founder chose.
+// Each morning: fresh news cards for Know it, on the topics the founder chose.
 export default async function handler(req, res) {
   if (req.method !== 'GET') return res.status(405).json({ ok: false, error: { code: 'METHOD_NOT_ALLOWED', message: 'Method not allowed' } });
   if (!process.env.CRON_SECRET || req.headers?.authorization !== `Bearer ${process.env.CRON_SECRET}`) return res.status(401).json({ ok: false, error: { code: 'UNAUTHORIZED', message: 'Unauthorized' } });

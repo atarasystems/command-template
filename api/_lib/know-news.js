@@ -8,7 +8,7 @@ import { DEFAULT_SETTINGS, founderSettings, newsQueries } from './founder-settin
 
 const SERPER_NEWS = 'https://google.serper.dev/news';
 const PER_QUERY = 2;
-const KEEP_DAYS = 60;
+const KEEP_DAYS = 14; // News arrives daily, so two weeks keeps the deck short.
 
 export async function searchNews(q, { apiKey = process.env.SERPER_API_KEY, fetchImpl = fetch } = {}) {
   if (!apiKey) throw Object.assign(new Error('News search is not set up.'), { code: 'SERPER_NOT_CONFIGURED' });

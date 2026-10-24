@@ -24,6 +24,8 @@ a.btn{text-decoration:none;display:inline-flex;align-items:center}
 .tab{border:1px solid var(--line);background:var(--card);color:var(--body);border-radius:999px;padding:9px 16px;font:600 15px 'DM Sans',sans-serif;cursor:pointer;white-space:nowrap}
 .tab[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px}
+.field{display:block;margin:10px 0;font-size:14px;font-weight:600}
+.field input{display:block;width:100%;margin-top:6px;padding:12px;border:1px solid var(--line);border-radius:12px;font:400 15px 'DM Sans',sans-serif;background:var(--card);color:inherit}
 .games{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .game{border:1px solid var(--line);border-radius:18px;padding:18px;background:var(--card);text-align:left;cursor:pointer;font:inherit;color:inherit}
 .game strong{display:block;font-size:19px;margin-bottom:4px}
@@ -128,14 +130,14 @@ function render() {
   if (tab === 'play') {
     if (game && game.kind === 'match') return renderMatch();
     if (game && game.kind === 'quick') return renderQuick();
-    v.innerHTML = deckChips() + (pool().length < 4 ? '<div class="panel muted">Your facts are on their way. Check back soon.</div>' :
+    v.innerHTML = deckChips() + (pool().length < 4 ? '<div class="panel"><strong>Let\'s add your facts</strong><p class="muted">Games start once you have 4 cards. Make a set from your Setup answers in one tap, or add your own on any tab.</p><button class="btn" data-setup-cards="go">Make cards from my Setup</button></div>' :
       '<div class="games"><button class="game" data-play="match"><strong>Match</strong><span>Tap two tiles that go together. About 3 minutes.</span></button><button class="game" data-play="quick"><strong>Quick pick</strong><span>One question, three answers. Tap one.</span></button></div>') +
       '<p class="sound" style="margin-top:14px"><label><input type="checkbox" id="sound-toggle"' + (sound ? ' checked' : '') + '> Soft sounds</label></p>';
     return;
   }
   var list = cards.filter(function (c) { return c.deck === tab; });
-  var top = tab === 'news' ? '<div class="row"><span class="muted">New news cards come in every Monday morning.</span><button class="btn soft small" data-news="refresh">Get news now</button></div>' : '';
-  if (!list.length) { v.innerHTML = top + '<div class="panel muted">Nothing here yet.</div>'; return; }
+  var top = tab === 'news' ? '<div class="row"><span class="muted">New news cards come in each morning. Press the button any time for the latest.</span><button class="btn soft small" data-news="refresh">Get news now</button></div>' : addForm(tab);
+  if (!list.length) { v.innerHTML = top + '<div class="panel muted">' + (tab === 'news' ? 'Press Get news now for today\'s news.' : 'Add your first card above.') + '</div>'; return; }
   var groups = {}; list.forEach(function (c) { (groups[c.topic || 'Other'] = groups[c.topic || 'Other'] || []).push(c); });
   v.innerHTML = top + Object.keys(groups).map(function (g) {
     return '<div class="topic">' + esc(g) + '</div>' + groups[g].map(function (c) {
@@ -146,6 +148,34 @@ function render() {
         '<div style="margin-top:10px;text-align:right"><button class="btn soft small" data-retire="' + esc(c.id) + '">Take out</button></div></div>';
     }).join('');
   }).join('');
+}
+
+// Add a card: a question and its answer. Pitch tab also offers cards made from Setup.
+var DECK_HELP = { statistics: 'A number you want to know by heart, like how many people you serve.', pitch: 'Something you say about your business, like who you help.', people: 'Someone you want to remember, like a funder or a mentor.', stakeholders: 'A group that cares about your work, like a partner or a funder.' };
+function addForm(d) {
+  return '<details class="panel" style="margin-bottom:14px"><summary style="cursor:pointer;font-weight:600">Add a card</summary>' +
+    '<p class="muted">' + esc(DECK_HELP[d] || '') + '</p>' +
+    '<form id="add-card" data-deck-add="' + esc(d) + '">' +
+    '<label class="field">Question<input name="prompt" maxlength="160" required placeholder="Who do we serve?"></label>' +
+    '<label class="field">Answer<input name="answer" maxlength="160" required placeholder="Short answer that fits on a tile"></label>' +
+    '<label class="field">More detail (optional)<input name="detail" maxlength="600"></label>' +
+    '<label class="field">Where it came from (optional)<input name="source" maxlength="200" placeholder="A report, a website, your own records"></label>' +
+    '<button class="btn" type="submit">Save card</button> <span class="muted" id="add-status"></span></form></details>' +
+    (d === 'pitch' ? '<div class="row" style="margin-bottom:14px"><span class="muted">Want a head start? Command can make cards from your Setup answers.</span><button class="btn soft small" data-setup-cards="go">Make cards from my Setup</button></div>' : '');
+}
+document.addEventListener('submit', function (e) {
+  var form = e.target; if (form.id !== 'add-card') return; e.preventDefault();
+  var status = document.getElementById('add-status'); status.textContent = 'Saving...';
+  var data = { deck: form.dataset.deckAdd, prompt: form.prompt.value, answer: form.answer.value, detail: form.detail.value, source: form.source.value };
+  json('/api/know', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'add', card: data }) })
+    .then(function (card) { cards.push(card); render(); var d = document.querySelector('#view details'); if (d) d.open = true; var s = document.getElementById('add-status'); if (s) s.textContent = 'Saved. Add another?'; })
+    .catch(function (err) { status.textContent = err.message; });
+});
+function setupCards(button) {
+  button.disabled = true; button.textContent = 'Making your cards...';
+  json('/api/know', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'from_setup' }) })
+    .then(function (d) { return json('/api/know').then(function (all) { cards = all; render(); var b = document.querySelector('[data-setup-cards]'); if (b) b.textContent = d.added + ' cards made'; }); })
+    .catch(function (err) { button.disabled = false; button.textContent = err.message || 'Try again'; });
 }
 
 // Match: each card makes two tiles, its prompt and its answer. Clear the board by matching them.
@@ -219,7 +249,8 @@ function chooseOption(k) {
 }
 
 document.addEventListener('click', function (e) {
-  var el = e.target.closest('[data-tab],[data-deck],[data-play],[data-tile],[data-opt],[data-retire],[data-news]'); if (!el) return;
+  var el = e.target.closest('[data-tab],[data-deck],[data-play],[data-tile],[data-opt],[data-retire],[data-news],[data-setup-cards]'); if (!el) return;
+  if (el.dataset.setupCards) return setupCards(el);
   if (el.dataset.retire) return retire(el.dataset.retire, el);
   if (el.dataset.news) return getNews(el);
   if (el.dataset.tab) { tab = el.dataset.tab; game = null; return render(); }
