@@ -39,6 +39,13 @@ export function shapeResult(parsed) {
   return { who: noDashes(parsed?.who || '').slice(0, 200), they_said: noDashes(parsed?.they_said || '').slice(0, 600), watch_for: noDashes(parsed?.watch_for || '').slice(0, 400), replies };
 }
 
+// Google's own words are technical. Say what to do next instead.
+export function friendly(message = '') {
+  if (/api key|permission|PERMISSION_DENIED|unauthorized/i.test(message)) return 'The AI key needs a look. Open Setup, then Connections, and check the Gemini key.';
+  if (/quota|rate|exhausted|429/i.test(message)) return 'The AI is busy right now. Wait a minute and press Write replies again.';
+  return 'The reply helper needs another try. Press Write replies again, or paste the words instead of a screenshot.';
+}
+
 async function readNotes(db) {
   const row = await db.from('command_notes').select('body').eq('note_key', NOTES_KEY).maybeSingle();
   if (row.error) throw row.error;
@@ -58,12 +65,12 @@ export async function writeReplies({ image = null, text = '', ask = '', tweak = 
       body: JSON.stringify({ contents: [{ role: 'user', parts }], generationConfig: { responseMimeType: 'application/json', temperature: 0.7 } }),
     });
     const payload = await response.json().catch(() => ({}));
-    if (response.status === 404) { last = payload; continue; }
-    if (!response.ok) throw Object.assign(new Error(payload?.error?.message || 'The reply helper could not answer. Try again.'), { status: 502 });
+    // Any model that cannot answer (retired, busy, or rejects the picture) hands off to the next one in line.
+    if (!response.ok) { last = payload; console.error('[Reply help model]', model, response.status, payload?.error?.message || ''); continue; }
     const out = (payload?.candidates?.[0]?.content?.parts || []).map((p) => p.text || '').join('');
-    return shapeResult(parseJson(out));
+    try { return shapeResult(parseJson(out)); } catch (error) { last = { error: { message: error.message } }; console.error('[Reply help answer]', model, error.message); }
   }
-  throw Object.assign(new Error(last?.error?.message || 'No writing model is available right now.'), { status: 502 });
+  throw Object.assign(new Error(friendly(last?.error?.message)), { status: 502 });
 }
 
 async function handler(req, res) {

@@ -29,3 +29,17 @@ test('Know it offers ways to add facts and news refreshes each morning', () => {
   const cron = JSON.parse(fs.readFileSync(new URL('../vercel.json', import.meta.url), 'utf8')).crons.find((c) => c.path === '/api/cron/know-news');
   assert.equal(cron.schedule, '5 11 * * *');
 });
+
+test('Reply help moves to the next model when one cannot answer', async () => {
+  const { writeReplies } = await import('../api/ai/message-help.js');
+  process.env.GEMINI_API_KEY = 'test-key';
+  const calls = [];
+  const fetchImpl = async (url) => {
+    calls.push(url);
+    if (calls.length === 1) return { ok: false, status: 400, json: async () => ({ error: { message: 'model does not support image input' } }) };
+    return { ok: true, status: 200, json: async () => ({ candidates: [{ content: { parts: [{ text: '{"who":"Ana","they_said":"Hi","replies":[{"label":"Warm","text":"Hello Ana"}]}' }] } }] }) };
+  };
+  const out = await writeReplies({ image: 'data:image/png;base64,AAAA', text: '' }, { fetchImpl });
+  assert.equal(calls.length, 2);
+  assert.equal(out.replies[0].text, 'Hello Ana');
+});
