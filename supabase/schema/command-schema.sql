@@ -1179,6 +1179,7 @@ create or replace view public.command_finance_month_summary as
 
 -- Private file storage for Funding documents.
 insert into storage.buckets (id, name, public) values ('personal-docs', 'personal-docs', false) on conflict (id) do nothing;
+insert into storage.buckets (id, name, public) values ('know-docs', 'know-docs', false) on conflict (id) do nothing;
 
 -- The Funding Ready Kit: reusable pieces most applications ask for. Everything starts as not started.
 insert into public.command_funding_kit (key, label, category, refresh_days, refresh_rule, sort) values

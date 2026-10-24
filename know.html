@@ -130,7 +130,7 @@ function render() {
   if (tab === 'play') {
     if (game && game.kind === 'match') return renderMatch();
     if (game && game.kind === 'quick') return renderQuick();
-    v.innerHTML = deckChips() + (pool().length < 4 ? '<div class="panel"><strong>Let\'s add your facts</strong><p class="muted">Games start once you have 4 cards. Make a set from your Setup answers in one tap, or add your own on any tab.</p><button class="btn" data-setup-cards="go">Make cards from my Setup</button></div>' :
+    v.innerHTML = deckChips() + (pool().length < 4 ? '<div class="panel"><strong>Let\'s add your facts</strong><p class="muted">Games start once you have 4 cards. Add your business files and Command makes the cards for you. You can also make cards from your Setup answers, or add your own on any tab.</p>' + uploadBox() + '<p style="margin-top:12px"><button class="btn soft" data-setup-cards="go">Make cards from my Setup</button></p></div>' :
       '<div class="games"><button class="game" data-play="match"><strong>Match</strong><span>Tap two tiles that go together. About 3 minutes.</span></button><button class="game" data-play="quick"><strong>Quick pick</strong><span>One question, three answers. Tap one.</span></button></div>') +
       '<p class="sound" style="margin-top:14px"><label><input type="checkbox" id="sound-toggle"' + (sound ? ' checked' : '') + '> Soft sounds</label></p>';
     return;
@@ -161,7 +161,36 @@ function addForm(d) {
     '<label class="field">More detail (optional)<input name="detail" maxlength="600"></label>' +
     '<label class="field">Where it came from (optional)<input name="source" maxlength="200" placeholder="A report, a website, your own records"></label>' +
     '<button class="btn" type="submit">Save card</button> <span class="muted" id="add-status"></span></form></details>' +
-    (d === 'pitch' ? '<div class="row" style="margin-bottom:14px"><span class="muted">Want a head start? Command can make cards from your Setup answers.</span><button class="btn soft small" data-setup-cards="go">Make cards from my Setup</button></div>' : '');
+    (d === 'pitch' ? '<div class="panel" style="margin-bottom:14px"><strong>Want a head start?</strong><p class="muted">Add your business files and Command makes the cards for you.</p>' + uploadBox() + '<p style="margin-top:12px"><button class="btn soft small" data-setup-cards="go">Make cards from my Setup</button></p></div>' : '');
+}
+// Upload: pitch deck, executive summary, business model canvas, one pagers. Files are read once, then removed.
+function uploadBox() {
+  return '<label class="btn" style="display:inline-flex;align-items:center">Add my files<input type="file" id="know-files" multiple hidden accept=".pdf,.docx,.pptx,.png,.jpg,.jpeg,.webp,.txt,.md,.csv"></label>' +
+    '<p class="muted" style="font-size:14px;margin-top:8px">Your pitch deck, executive summary, business model canvas, one pagers or marketing pieces. PDF, Word, PowerPoint, pictures or text, up to 15 MB each. Command reads them once to make your cards, then deletes the files.</p>' +
+    '<p class="muted" id="know-files-status" role="status"></p>';
+}
+document.addEventListener('change', function (e) {
+  if (e.target.id !== 'know-files' || !e.target.files.length) return;
+  addFiles([].slice.call(e.target.files, 0, 10));
+});
+async function addFiles(list) {
+  var status = document.getElementById('know-files-status');
+  function say(t) { var s = document.getElementById('know-files-status'); if (s) s.textContent = t; }
+  try {
+    var done = [];
+    for (var i = 0; i < list.length; i++) {
+      var f = list[i];
+      say('Adding ' + f.name + ' (' + (i + 1) + ' of ' + list.length + ')...');
+      var link = await json('/api/know', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'upload_url', name: f.name, size: f.size }) });
+      var put = await fetch(link.signed_url, { method: 'PUT', headers: { 'Content-Type': f.type || 'application/octet-stream', 'x-upsert': 'true' }, body: f });
+      if (!put.ok) throw new Error(f.name + ' did not upload. Try again.');
+      done.push({ path: link.path, name: f.name });
+    }
+    say('Reading your files and making cards. This takes about a minute...');
+    var made = await json('/api/know', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'from_files', files: done }) });
+    cards = await json('/api/know'); tab = 'play'; deck = 'all'; render();
+    say(made.added + ' cards made. Have fun playing.');
+  } catch (err) { say(err.message || 'That did not work. Try again.'); }
 }
 document.addEventListener('submit', function (e) {
   var form = e.target; if (form.id !== 'add-card') return; e.preventDefault();

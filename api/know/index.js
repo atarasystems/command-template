@@ -3,6 +3,7 @@ import { allowMethods, bodyOf, sendData, sendError } from '../_lib/http.js';
 import { getSupabase } from '../_lib/supabase.js';
 import { refreshNews } from '../_lib/know-news.js';
 import { aiJson } from '../_lib/ai.js';
+import { BUCKET, acceptable, safePath, cardsFromFiles } from '../_lib/know-files.js';
 import { founderSettings, knowledgeText } from '../_lib/founder-settings.js';
 
 // Know it: the founder's facts to have ready (statistics, stakeholders). Practice moves each card along simple
@@ -96,6 +97,37 @@ async function handler(req, res) {
       const saved = await db.from('command_knowledge_cards').insert(made);
       if (saved.error) throw saved.error;
       return sendData(res, { added: made.length });
+    }
+    // Step 1 of adding files: a private one-time upload link for each file, so big decks skip the size limit here.
+    if (body.action === 'upload_url') {
+      const problem = acceptable(body.name, body.size);
+      if (problem) return sendError(res, { code: 'VALIDATION_ERROR', message: problem }, 400);
+      const made = await db.storage.from(BUCKET).createSignedUploadUrl(safePath(body.name));
+      if (made.error) throw made.error;
+      return sendData(res, { path: made.data.path, signed_url: made.data.signedUrl });
+    }
+    // Step 2: read the files, make cards, then remove the files. Cards from a file replace the last cards from that file.
+    if (body.action === 'from_files') {
+      const list = (Array.isArray(body.files) ? body.files : []).filter((f) => f && f.path && f.name).slice(0, 10);
+      if (!list.length) return sendError(res, { code: 'VALIDATION_ERROR', message: 'Add a file first.' }, 400);
+      try {
+        const files = [];
+        for (const f of list) {
+          const got = await db.storage.from(BUCKET).download(String(f.path));
+          if (got.error) throw got.error;
+          files.push({ name: String(f.name).slice(0, 120), buffer: Buffer.from(await got.data.arrayBuffer()) });
+        }
+        const made = await cardsFromFiles(files);
+        if (!made.length) return sendError(res, { code: 'NOTHING_MADE', message: 'Command could not find facts in those files. Try a PDF of your deck or summary.' }, 400);
+        const names = [...new Set(made.map((c) => c.source))];
+        const old = await db.from('command_knowledge_cards').update({ status: 'retired', updated_at: new Date().toISOString() }).in('source', names).eq('status', 'current');
+        if (old.error) throw old.error;
+        const saved = await db.from('command_knowledge_cards').insert(made);
+        if (saved.error) throw saved.error;
+        return sendData(res, { added: made.length });
+      } finally {
+        await db.storage.from(BUCKET).remove(list.map((f) => String(f.path))).catch(() => {});
+      }
     }
     if (body.action === 'refresh_news') return sendData(res, await refreshNews(db));
     return sendError(res, { code: 'VALIDATION_ERROR', message: 'Unknown action.' }, 400);
