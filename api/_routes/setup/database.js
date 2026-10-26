@@ -37,10 +37,21 @@ export async function schemaReady(db) {
   } catch { return false; }
 }
 
+export function withoutSslMode(url = '') {
+  try {
+    const u = new URL(url);
+    for (const k of ['sslmode', 'sslrootcert', 'sslcert', 'sslkey', 'uselibpqcompat']) u.searchParams.delete(k);
+    return u.toString();
+  } catch { return String(url).replace(/([?&])sslmode=[^&]*&?/i, '$1').replace(/[?&]$/, ''); }
+}
+
 export async function createTables({ url = databaseUrl(), sql = null, Client = pg.Client } = {}) {
   if (!url) throw Object.assign(new Error('Command cannot reach the database yet. Connect Supabase to this project in Vercel (Storage tab), then redeploy.'), { code: 'NO_DATABASE_URL', status: 503 });
   const schema = sql ?? await fs.readFile(SCHEMA_FILE, 'utf8');
-  const client = new Client({ connectionString: url, ssl: /localhost|127\.0\.0\.1/.test(url) ? false : { rejectUnauthorized: false } });
+  const local = /localhost|127\.0\.0\.1/.test(url);
+  // Supabase links carry sslmode=require, which makes pg check the certificate chain and fail on Supabase's own
+  // certificate. The connection stays encrypted; it just uses the ssl setting below instead of the link's.
+  const client = new Client({ connectionString: local ? url : withoutSslMode(url), ssl: local ? false : { rejectUnauthorized: false } });
   await client.connect();
   try {
     await client.query(schema);

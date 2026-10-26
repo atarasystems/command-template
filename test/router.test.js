@@ -46,3 +46,10 @@ test('a brand new copy with no tables goes straight to Setup', () => {
   assert.match(src, /checkFirstRun/);
   assert.match(src, /d\.ready === false\) location\.href = '\/setup\.html'/);
 });
+
+test('the database link drops sslmode so Supabase connects on first run', async () => {
+  const { withoutSslMode } = await import('../api/_routes/setup/database.js');
+  const out = withoutSslMode('postgres://u:p@db.x.supabase.co:5432/postgres?sslmode=require&supa=base-pooler.x');
+  assert.doesNotMatch(out, /sslmode/);
+  assert.match(out, /supa=base-pooler\.x/);
+});
