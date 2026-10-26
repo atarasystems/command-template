@@ -42,8 +42,17 @@
     load: function () {
       return fetch('/api/settings', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (p) {
         if (p && p.ok && p.data && p.data.settings) { write(p.data.settings); apply(p.data.settings); }
+        else if (!current) api.checkFirstRun();
         return current;
       }).catch(function () { return current; });
+    },
+    // A brand new copy has no tables yet, so settings cannot load. Send it to Setup, where "Create my tables" lives.
+    checkFirstRun: function () {
+      if (typeof location === 'undefined' || /setup\.html/.test(location.pathname) || /[?&]skip-setup/.test(location.search)) return;
+      fetch('/api/setup/database', { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (p) {
+        var d = p && (p.data || p);
+        if (d && d.ready === false) location.href = '/setup.html';
+      }).catch(function () {});
     },
   };
 

@@ -40,3 +40,9 @@ test('errors Command raises on purpose keep their plain message', () => {
   assert.equal(hidden.code, 500);
   assert.doesNotMatch(hidden.body.error.message, /password/);
 });
+
+test('a brand new copy with no tables goes straight to Setup', () => {
+  const src = fs.readFileSync('command-settings.js', 'utf8');
+  assert.match(src, /checkFirstRun/);
+  assert.match(src, /d\.ready === false\) location\.href = '\/setup\.html'/);
+});
