@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 
-import { buildTransactionValues, summarizeFinance } from '../api/_lib/finance.js';
-import { mapRiverAction } from '../api/_lib/river-actions.js';
+import { buildTransactionValues, summarizeFinance } from '../api/_routes/_lib/finance.js';
+import { mapRiverAction } from '../api/_routes/_lib/river-actions.js';
 
 const now = new Date('2026-10-07T12:00:00Z');
 
@@ -67,7 +67,7 @@ test('River money, work, grant, milestone and contact actions map to Supabase ta
 });
 
 test('River action route writes to Supabase and no longer calls Google Apps Script', () => {
-  const route = fs.readFileSync(new URL('../api/river-action.js', import.meta.url), 'utf8');
+  const route = fs.readFileSync(new URL('../api/_routes/river-action.js', import.meta.url), 'utf8');
   assert.match(route, /runRiverAction/);
   assert.doesNotMatch(route, /script\.google\.com/);
   assert.doesNotMatch(route, /Access-Control-Allow-Origin/);

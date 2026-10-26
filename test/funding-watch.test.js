@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { estimateApplicationEffort, findOpportunityMatch, ingestFundingWatch, normalizeIdentity, normalizeUrl } from '../api/_lib/funding-watch.js';
+import { estimateApplicationEffort, findOpportunityMatch, ingestFundingWatch, normalizeIdentity, normalizeUrl } from '../api/_routes/_lib/funding-watch.js';
 
 const watchPayload = {
   program_name: 'NSF SBIR/STTR Phase I', organization: 'U.S. National Science Foundation',
@@ -71,15 +71,15 @@ test('effort is derived from verified requirements and reusable materials', () =
 });
 
 test('watch endpoint is authenticated and has one shared ingestion boundary', () => {
-  const endpoint = fs.readFileSync(new URL('../api/opportunities/watch.js', import.meta.url), 'utf8');
+  const endpoint = fs.readFileSync(new URL('../api/_routes/opportunities/watch.js', import.meta.url), 'utf8');
   assert.match(endpoint, /withCommandAuth/);
   assert.doesNotMatch(endpoint, /command_applications|work_items/);
-  const programs = fs.readFileSync(new URL('../api/opportunities/programs.js', import.meta.url), 'utf8');
+  const programs = fs.readFileSync(new URL('../api/_routes/opportunities/programs.js', import.meta.url), 'utf8');
   assert.match(programs, /external_program_id/);
 });
 
 test('watch updates do not write dismissal or lifecycle fields', () => {
-  const source = fs.readFileSync(new URL('../api/_lib/funding-watch.js', import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL('../api/_routes/_lib/funding-watch.js', import.meta.url), 'utf8');
   assert.match(source, /\['funding_intent', 'status', 'title', 'notes'\]/);
   assert.doesNotMatch(source, /dismissed_reason.*UPDATE_FIELDS/);
 });

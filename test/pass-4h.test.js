@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import fs from 'node:fs';
-import labelsHandler from '../api/gmail/labels.js';
-import { ensureRelationshipLabels, modifyThreadLabels, RELATIONSHIP_GMAIL_LABELS } from '../api/_lib/gmail.js';
+import labelsHandler from '../api/_routes/gmail/labels.js';
+import { ensureRelationshipLabels, modifyThreadLabels, RELATIONSHIP_GMAIL_LABELS } from '../api/_routes/_lib/gmail.js';
 
 function response() { return { statusCode: 200, payload: null, status(code) { this.statusCode = code; return this; }, json(value) { this.payload = value; return this; } }; }
-import { isWaitingOnThem, matchGmailInsightToContact, relationshipModes, relationshipQueueRank, relationshipStage } from '../api/_lib/relationships.js';
+import { isWaitingOnThem, matchGmailInsightToContact, relationshipModes, relationshipQueueRank, relationshipStage } from '../api/_routes/_lib/relationships.js';
 
 const contact = (overrides = {}) => ({ id: 'c1', email: 'person@example.com', relationshipType: 'network', areas: [], interest: 'networking', contactStatus: 'new', captureStatus: 'complete', ...overrides });
 

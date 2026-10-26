@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
-import { levelsFor, periodFor, previousMonthRef, cleanFollowups, noDashes, gatherForReview, reviewPrompt, writeReview } from '../api/_lib/updates.js';
+import { levelsFor, periodFor, previousMonthRef, cleanFollowups, noDashes, gatherForReview, reviewPrompt, writeReview } from '../api/_routes/_lib/updates.js';
 
 function fakeDb(rows) {
   return { from() {
@@ -63,7 +63,7 @@ test('Follow-ups are cleaned, capped and never dated in the past', () => {
 
 test('Updates page is in the menu and reviews run on Fridays and the 1st', () => {
   const shell = fs.readFileSync(new URL('../command-shell.js', import.meta.url), 'utf8');
-  const cron = fs.readFileSync(new URL('../api/cron/reviews.js', import.meta.url), 'utf8');
+  const cron = fs.readFileSync(new URL('../api/_routes/cron/reviews.js', import.meta.url), 'utf8');
   const ui = fs.readFileSync(new URL('../command-updates.js', import.meta.url), 'utf8');
   const config = JSON.parse(fs.readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
   assert.ok(shell.includes("label: 'Updates'"));

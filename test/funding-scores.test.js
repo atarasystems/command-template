@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { moneyScore, provisionalScores, fundingGroup, defaultLeadDays, prepStartFor } from '../api/_lib/funding-scores.js';
-import { prepItemsFor, kitState } from '../api/_lib/funding-prep.js';
+import { moneyScore, provisionalScores, fundingGroup, defaultLeadDays, prepStartFor } from '../api/_routes/_lib/funding-scores.js';
+import { prepItemsFor, kitState } from '../api/_routes/_lib/funding-prep.js';
 
 test('money bands and groups', () => {
   assert.equal(moneyScore(5000), 20);

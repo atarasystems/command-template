@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 import JSZip from 'jszip';
-import { acceptable, officeText, cardsFromFiles, shapeFileCards, filesPrompt } from '../api/_lib/know-files.js';
+import { acceptable, officeText, cardsFromFiles, shapeFileCards, filesPrompt } from '../api/_routes/_lib/know-files.js';
 
 test('accepts business files and explains anything else in plain words', () => {
   assert.equal(acceptable('Deck.pdf', 1000), '');
@@ -41,7 +41,7 @@ test('Know it page offers file upload and the server removes files after reading
   const page = fs.readFileSync(new URL('../know.html', import.meta.url), 'utf8');
   assert.match(page, /Add my files/);
   assert.match(page, /then deletes the files/);
-  const api = fs.readFileSync(new URL('../api/know/index.js', import.meta.url), 'utf8');
+  const api = fs.readFileSync(new URL('../api/_routes/know/index.js', import.meta.url), 'utf8');
   assert.match(api, /finally \{\s*await db\.storage\.from\(BUCKET\)\.remove/);
   const schema = fs.readFileSync(new URL('../supabase/schema/command-schema.sql', import.meta.url), 'utf8');
   assert.match(schema, /'know-docs', 'know-docs', false/);

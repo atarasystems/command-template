@@ -4,9 +4,9 @@ import fs from 'node:fs';
 import { PGlite } from '@electric-sql/pglite';
 import {
   DEFAULT_SETTINGS, envTimeZone, founderSettings, knowledgeText, settingsFromRows, setupStatus, voiceText, clearSettingsCache, fundingProfileText,
-} from '../api/_lib/founder-settings.js';
-import { validateSection, draftVoice } from '../api/settings/index.js';
-import { createTables, databaseUrl } from '../api/setup/database.js';
+} from '../api/_routes/_lib/founder-settings.js';
+import { validateSection, draftVoice } from '../api/_routes/settings/index.js';
+import { createTables, databaseUrl } from '../api/_routes/setup/database.js';
 import { SAMPLE, SAMPLE_ROWS } from './fixtures/founder.js';
 
 const PERSONAL = /Solei|Atara|SpectrumThrive|SCOPE|Sky Harper|Maryland|TEDCO|soleiwilliams/;

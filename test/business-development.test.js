@@ -2,11 +2,11 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { SAMPLE } from './fixtures/founder.js';
 import fs from 'node:fs';
-import handler from '../api/ai/business-development.js';
-import { buildOutreachContext, createOutreachPrompt, generateOutreachPrep, parseOutreachResponse } from '../api/_lib/business-development.js';
-import { createCommandSession } from '../api/_lib/auth.js';
-import { hasInitializedSupabaseClient } from '../api/_lib/supabase.js';
-import { AI_EMPLOYEES } from '../api/_lib/ai-team.js';
+import handler from '../api/_routes/ai/business-development.js';
+import { buildOutreachContext, createOutreachPrompt, generateOutreachPrep, parseOutreachResponse } from '../api/_routes/_lib/business-development.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
+import { hasInitializedSupabaseClient } from '../api/_routes/_lib/supabase.js';
+import { AI_EMPLOYEES } from '../api/_routes/_lib/ai-team.js';
 
 const sessionSecret = 'test-session-secret-with-at-least-thirty-two-characters';
 
@@ -94,7 +94,7 @@ test('Business Development safely rejects malformed provider output', () => {
 });
 
 test('Business Development generation path is read-only and isolated from legacy execution', () => {
-  const source = fs.readFileSync(new URL('../api/ai/business-development.js', import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL('../api/_routes/ai/business-development.js', import.meta.url), 'utf8');
   for (const mutation of ['.insert(', '.update(', '.delete(', '.rpc(']) assert.equal(source.includes(mutation), false);
   for (const forbidden of ['river', 'employee-dispatch', 'send-email', 'resend', 'Stripe', 'partner_report_requests', 'credit_redemption', 'slack']) assert.equal(source.toLowerCase().includes(forbidden.toLowerCase()), false);
 });

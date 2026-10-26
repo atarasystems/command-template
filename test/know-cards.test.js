@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
-import { cardFromInput, setupCardsPrompt, shapeSetupCards, SETUP_SOURCE } from '../api/know/index.js';
+import { cardFromInput, setupCardsPrompt, shapeSetupCards, SETUP_SOURCE } from '../api/_routes/know/index.js';
 
 test('a typed card needs a question and an answer and lands in a known deck', () => {
   assert.throws(() => cardFromInput({ prompt: 'Who do we serve?' }), /question and an answer/);
@@ -31,7 +31,7 @@ test('Know it offers ways to add facts and news refreshes each morning', () => {
 });
 
 test('Reply help moves to the next model when one cannot answer', async () => {
-  const { writeReplies } = await import('../api/ai/message-help.js');
+  const { writeReplies } = await import('../api/_routes/ai/message-help.js');
   process.env.GEMINI_API_KEY = 'test-key';
   const calls = [];
   const fetchImpl = async (url) => {

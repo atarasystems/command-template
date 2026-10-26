@@ -14,7 +14,7 @@ test('Funding Hub exposes a secondary dismiss action and human dismissal flow', 
 });
 
 test('dismissal API is authenticated, additive, reasoned, and protects submitted history', () => {
-  const source = read('api/opportunities/programs.js');
+  const source = read('api/_routes/opportunities/programs.js');
   assert.match(source, /withCommandAuth/);
   assert.match(source, /DISMISS_REASONS/);
   assert.match(source, /status: 'archived'/);

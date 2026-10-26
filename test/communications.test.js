@@ -1,15 +1,15 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
-import handler from '../api/ai/communications.js';
+import handler from '../api/_routes/ai/communications.js';
 import {
   buildCommunicationContext,
   createCommunicationPrompt,
   draftTypeForPurpose,
   generateCommunicationDraft,
   parseCommunicationResponse,
-} from '../api/_lib/communications.js';
-import { createCommandSession } from '../api/_lib/auth.js';
+} from '../api/_routes/_lib/communications.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
 import { SAMPLE } from './fixtures/founder.js';
 
 const sessionSecret = 'communications-test-secret-at-least-thirty-two-characters';
@@ -78,7 +78,7 @@ test('generation runs through the shared AI helper and never sends email', async
 });
 
 test('communication route creates a reviewable draft and never sends', () => {
-  const source = fs.readFileSync(new URL('../api/ai/communications.js', import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL('../api/_routes/ai/communications.js', import.meta.url), 'utf8');
   assert.match(source, /insertRow\('crm_email_drafts'/);
   assert.match(source, /status: 'needs_review'/);
   assert.match(source, /needs_human: true/);

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
-import knowledgeHandler from '../api/knowledge/index.js';
-import { hasInitializedSupabaseClient } from '../api/_lib/supabase.js';
+import knowledgeHandler from '../api/_routes/knowledge/index.js';
+import { hasInitializedSupabaseClient } from '../api/_routes/_lib/supabase.js';
 
 function response() {
   return { statusCode: 200, payload: null, status(code) { this.statusCode = code; return this; }, json(value) { this.payload = value; return this; } };
@@ -18,7 +18,7 @@ test('knowledge API is session-protected before database initialization', async 
 });
 
 test('Pass 4F knowledge API uses only columns in the applied schema', async () => {
-  const source = await readFile(new URL('../api/knowledge/index.js', import.meta.url), 'utf8');
+  const source = await readFile(new URL('../api/_routes/knowledge/index.js', import.meta.url), 'utf8');
   for (const expected of ['canonical_live_link', 'is_canonical', 'last_reviewed_at', 'needs_update_reason', 'living_doc_id', 'export_type', 'show_today', 'recurring_use_label', 'last_copied_at']) assert.match(source, new RegExp(expected));
   for (const forbidden of ['archived_at', 'canonical_link', 'canonical:', 'last_reviewed:', 'document_id', 'format:', 'description:', 'recurring_label', 'last_copied:']) assert.doesNotMatch(source, new RegExp(forbidden));
   for (const forbidden of ['partner_report_requests', 'public.leads', 'Stripe', 'credit_redemption', 'generate-website-audit', 'send-email', 'river-action']) assert.equal(source.toLowerCase().includes(forbidden.toLowerCase()), false);

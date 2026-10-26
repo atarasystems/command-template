@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import { researchFundingOpportunity } from '../api/_lib/funding-research.js';
-import { applicationSummaryFromResponse, normalizeResponse } from '../api/_lib/application-responses.js';
+import { researchFundingOpportunity } from '../api/_routes/_lib/funding-research.js';
+import { applicationSummaryFromResponse, normalizeResponse } from '../api/_routes/_lib/application-responses.js';
 
 const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
@@ -31,9 +31,9 @@ test('response updates normalize, sort through the API query, and update applica
 });
 
 test('research and response routes are authenticated and use existing systems', () => {
-  const research = read('api/opportunities/research.js');
-  const responses = read('api/applications/responses.js');
-  const search = read('api/applications/response-search.js');
+  const research = read('api/_routes/opportunities/research.js');
+  const responses = read('api/_routes/applications/responses.js');
+  const search = read('api/_routes/applications/response-search.js');
   assert.match(research, /withCommandAuth/);
   assert.match(research, /saved: false/);
   assert.match(responses, /withCommandAuth/);

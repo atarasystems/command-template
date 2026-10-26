@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import cardExtract, { CARD_PROMPT, cardFields } from '../api/crm/card-extract.js';
-import { createCommandSession } from '../api/_lib/auth.js';
-import contacts from '../api/crm/contacts.js';
+import cardExtract, { CARD_PROMPT, cardFields } from '../api/_routes/crm/card-extract.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
+import contacts from '../api/_routes/crm/contacts.js';
 import fs from 'node:fs';
 
 function response() { return { headers: {}, statusCode: 200, payload: null, setHeader(n, v) { this.headers[n.toLowerCase()] = v; }, status(c) { this.statusCode = c; return this; }, json(v) { this.payload = v; return this; }, end() {} }; }
@@ -13,7 +13,7 @@ test.before(() => { process.env.COMMAND_SESSION_SECRET = 'pass-4g-test-secret-at
 test.after(() => { delete process.env.COMMAND_SESSION_SECRET; delete process.env.OPENAI_API_KEY; delete process.env.GEMINI_API_KEY; });
 
 test('Pass 4G schema and UI expose only approved contact context fields', () => {
-  const api = fs.readFileSync(new URL('../api/crm/contacts.js', import.meta.url), 'utf8');
+  const api = fs.readFileSync(new URL('../api/_routes/crm/contacts.js', import.meta.url), 'utf8');
   const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
   const schema = fs.readFileSync(new URL('../supabase/schema/command-schema.sql', import.meta.url), 'utf8');
   for (const field of ['areas', 'interest', 'capture_status']) assert.match(api, new RegExp(field));

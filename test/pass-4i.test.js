@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import fs from 'node:fs';
-import { HUB_TYPE_LABELS, normalizeOpportunityHub } from '../api/_lib/opportunity-hub.js';
-import hubHandler from '../api/crm/opportunity-hub.js';
+import { HUB_TYPE_LABELS, normalizeOpportunityHub } from '../api/_routes/_lib/opportunity-hub.js';
+import hubHandler from '../api/_routes/crm/opportunity-hub.js';
 
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
-const hubApi = fs.readFileSync(new URL('../api/crm/opportunity-hub.js', import.meta.url), 'utf8');
-const opportunityApi = fs.readFileSync(new URL('../api/crm/opportunities.js', import.meta.url), 'utf8');
+const hubApi = fs.readFileSync(new URL('../api/_routes/crm/opportunity-hub.js', import.meta.url), 'utf8');
+const opportunityApi = fs.readFileSync(new URL('../api/_routes/crm/opportunities.js', import.meta.url), 'utf8');
 const rpcMigration = fs.readFileSync(new URL('../supabase/schema/command-schema.sql', import.meta.url), 'utf8');
 
 function response() { return { statusCode: 200, status(code) { this.statusCode = code; return this; }, json(value) { this.payload = value; return this; } }; }

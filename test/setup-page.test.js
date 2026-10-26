@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { DEFAULT_SETTINGS, SECTIONS } from '../api/_lib/founder-settings.js';
+import { DEFAULT_SETTINGS, SECTIONS } from '../api/_routes/_lib/founder-settings.js';
 
 const html = fs.readFileSync(new URL('../setup.html', import.meta.url), 'utf8');
 

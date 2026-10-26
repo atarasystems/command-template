@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
-import accountsHandler from '../api/crm/accounts.js';
-import { createCommandSession } from '../api/_lib/auth.js';
+import accountsHandler from '../api/_routes/crm/accounts.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
 
 test('browser bundle never references server credentials or browser-only auth storage', async () => {
   const html = await readFile(new URL('../index.html', import.meta.url), 'utf8');
@@ -20,7 +20,7 @@ test('browser bundle never references server credentials or browser-only auth st
 test('every Revenue CRM route uses the server-side Command auth guard', async () => {
   const routes = ['accounts', 'activities', 'contacts', 'opportunities', 'suppressions'];
   for (const route of routes) {
-    const source = await readFile(new URL(`../api/crm/${route}.js`, import.meta.url), 'utf8');
+    const source = await readFile(new URL(`../api/_routes/crm/${route}.js`, import.meta.url), 'utf8');
     assert.match(source, /export default withCommandAuth\(handler\);/, `${route} must be session-protected`);
   }
 });

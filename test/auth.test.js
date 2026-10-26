@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import { createCommandSession, verifyCommandSession, withCommandAuth } from '../api/_lib/auth.js';
-import { hasInitializedSupabaseClient } from '../api/_lib/supabase.js';
-import loginHandler from '../api/auth/login.js';
-import logoutHandler from '../api/auth/logout.js';
-import accountsHandler from '../api/crm/accounts.js';
+import { createCommandSession, verifyCommandSession, withCommandAuth } from '../api/_routes/_lib/auth.js';
+import { hasInitializedSupabaseClient } from '../api/_routes/_lib/supabase.js';
+import loginHandler from '../api/_routes/auth/login.js';
+import logoutHandler from '../api/_routes/auth/logout.js';
+import accountsHandler from '../api/_routes/crm/accounts.js';
 
 function response() {
   return {

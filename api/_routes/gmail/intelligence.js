@@ -1,7 +1,7 @@
 import { withCommandAuth } from '../_lib/auth.js';
 import { getAccessToken, gmailConfigured, gmailMetadata, listInbox } from '../_lib/gmail.js';
 import { client, supabaseError } from '../_lib/work.js';
-import '../../email-attention.js';
+import '../../../email-attention.js';
 
 const emailAttention = globalThis.AtaraEmailAttention;
 

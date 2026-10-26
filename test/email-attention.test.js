@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import fs from 'node:fs';
 import vm from 'node:vm';
-import { ensureWork } from '../api/gmail/intelligence.js';
+import { ensureWork } from '../api/_routes/gmail/intelligence.js';
 
 function attention() {
   const context = { Intl, Date, Map, Set, Number, String, Boolean, Array, isNaN, globalThis: {} };

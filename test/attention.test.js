@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import test from 'node:test';
-import { aiWorkNeedsFounder, summarizeAiTeam } from '../api/_lib/ai-team.js';
+import { aiWorkNeedsFounder, summarizeAiTeam } from '../api/_routes/_lib/ai-team.js';
 
 const source = fs.readFileSync(new URL('../attention.js', import.meta.url), 'utf8');
 const context = { Intl, Date, Map, Set, Number, String, Array, isNaN, globalThis: {} };

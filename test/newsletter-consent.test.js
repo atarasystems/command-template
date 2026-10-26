@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
-import audienceHandler from '../api/crm/newsletter-audience.js';
-import signupHandler from '../api/newsletter/signup.js';
-import { createCommandSession } from '../api/_lib/auth.js';
+import audienceHandler from '../api/_routes/crm/newsletter-audience.js';
+import signupHandler from '../api/_routes/newsletter/signup.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
 import {
   assertEligibleForNewsletter,
   assertExplicitConsent,
@@ -13,7 +13,7 @@ import {
   normalizeNewsletterEmail,
   segmentValue,
   sourceValue,
-} from '../api/_lib/newsletter.js';
+} from '../api/_routes/_lib/newsletter.js';
 
 const secret = 'newsletter-test-secret-at-least-thirty-two-characters';
 function response() { return { statusCode: 200, payload: null, status(code) { this.statusCode = code; return this; }, json(value) { this.payload = value; return this; } }; }
@@ -65,7 +65,7 @@ test('authenticated audience management route rejects unauthenticated access', a
 });
 
 test('public signup cannot read subscribers or create CRM records', () => {
-  const source = fs.readFileSync(new URL('../api/newsletter/signup.js', import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL('../api/_routes/newsletter/signup.js', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /crm_contacts|crm_accounts|crm_opportunities|crm_activities|crm_scout|send-email|resend|gmail/i);
   assert.match(source, /explicit_consent/);
   assert.match(source, /assertPublicSource/);
@@ -80,7 +80,7 @@ test('public signup is JSON-only, bounded, and separates public from internal co
 });
 
 test('public signup does not disclose existing CRM, suppression, or segment state', () => {
-  const source = fs.readFileSync(new URL('../api/newsletter/signup.js', import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL('../api/_routes/newsletter/signup.js', import.meta.url), 'utf8');
   assert.match(source, /accepted: true/);
   assert.doesNotMatch(source, /subscriber|suppression|contact_id|segments:/i);
   assert.match(source, /NEWSLETTER_SILENT_ACCEPT/);
@@ -104,7 +104,7 @@ test('newsletter helper fails closed for suppression, global status, segment sta
 });
 
 test('existing communication flow remains separate from newsletter consent', () => {
-  const source = fs.readFileSync(new URL('../api/ai/communications.js', import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL('../api/_routes/ai/communications.js', import.meta.url), 'utf8');
   assert.doesNotMatch(source, /newsletter|subscription|consent/i);
   assert.match(source, /crm_email_drafts/);
 });
@@ -116,9 +116,9 @@ test('Audience UI exposes explicit add, global unsubscribe, segment unsubscribe,
 
 test('no newsletter send, Resend integration, campaign, token, Scout, or lead mutation exists in the foundation routes', () => {
   const source = [
-    fs.readFileSync(new URL('../api/_lib/newsletter.js', import.meta.url), 'utf8'),
-    fs.readFileSync(new URL('../api/crm/newsletter-audience.js', import.meta.url), 'utf8'),
-    fs.readFileSync(new URL('../api/newsletter/signup.js', import.meta.url), 'utf8'),
+    fs.readFileSync(new URL('../api/_routes/_lib/newsletter.js', import.meta.url), 'utf8'),
+    fs.readFileSync(new URL('../api/_routes/crm/newsletter-audience.js', import.meta.url), 'utf8'),
+    fs.readFileSync(new URL('../api/_routes/newsletter/signup.js', import.meta.url), 'utf8'),
   ].join('\n');
   assert.doesNotMatch(source, /resend|sendGmail|crm_email_drafts|crm_opportunities|crm_scout_candidates|public\.leads|campaign/i);
 });

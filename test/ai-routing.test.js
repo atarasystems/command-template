@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { routeAi, aiText, geminiModelFor } from '../api/_lib/ai.js';
+import { routeAi, aiText, geminiModelFor } from '../api/_routes/_lib/ai.js';
 
 function withEnv(env, fn) {
   const saved = { GEMINI_API_KEY: process.env.GEMINI_API_KEY, AI_PROVIDER: process.env.AI_PROVIDER };

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { calculateFundingPriority } from '../api/_lib/funding-priority.js';
+import { calculateFundingPriority } from '../api/_routes/_lib/funding-priority.js';
 
 test('funding priority excludes unknown inputs and exposes completeness', () => {
   const result = calculateFundingPriority({ strategic_fit_score: 100, eligibility_confidence_score: 80 });

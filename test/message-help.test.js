@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildPrompt, shapeResult, writeReplies } from '../api/ai/message-help.js';
+import { buildPrompt, shapeResult, writeReplies } from '../api/_routes/ai/message-help.js';
 import { SAMPLE } from './fixtures/founder.js';
 
 test('the reply prompt carries what the founder entered in setup and their booking link', () => {

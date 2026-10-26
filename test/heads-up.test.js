@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { cleanHeadsUp, worthReading, eventForAi, headsUpPrompt, readEvent, headsUpFromEmail } from '../api/_lib/heads-up.js';
+import { cleanHeadsUp, worthReading, eventForAi, headsUpPrompt, readEvent, headsUpFromEmail } from '../api/_routes/_lib/heads-up.js';
 
 const gbeta = {
   id: 'ev1', summary: 'BVVL gBETA Delaware Interviews - Fall 2026 (Maya Rivers)', updated: 'x', status: 'confirmed',

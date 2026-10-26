@@ -2,16 +2,16 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 
-import { createCommandSession } from '../api/_lib/auth.js';
-import { eventOverlaps, extractCalendarCandidates, parseAbsoluteDate, resolveEmailDate } from '../api/_lib/calendar-email.js';
-import { gmailBody } from '../api/_lib/gmail.js';
-import { createPendingCalendarAction, createPendingEmailRead, createPendingSenderResolution, verifyPendingCalendarAction, verifyPendingEmailRead, verifyPendingSenderResolution } from '../api/_lib/river-calendar-action.js';
-import candidateHandler from '../api/gmail/calendar-candidates.js';
-import { senderAlternatives, senderSimilarity } from '../api/gmail/calendar-candidates.js';
-import createEventHandler from '../api/create-event.js';
-import approveCalendarHandler from '../api/calendar/river-approve.js';
-import readEmailHandler from '../api/gmail/read.js';
-import riverHandler from '../api/river.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
+import { eventOverlaps, extractCalendarCandidates, parseAbsoluteDate, resolveEmailDate } from '../api/_routes/_lib/calendar-email.js';
+import { gmailBody } from '../api/_routes/_lib/gmail.js';
+import { createPendingCalendarAction, createPendingEmailRead, createPendingSenderResolution, verifyPendingCalendarAction, verifyPendingEmailRead, verifyPendingSenderResolution } from '../api/_routes/_lib/river-calendar-action.js';
+import candidateHandler from '../api/_routes/gmail/calendar-candidates.js';
+import { senderAlternatives, senderSimilarity } from '../api/_routes/gmail/calendar-candidates.js';
+import createEventHandler from '../api/_routes/create-event.js';
+import approveCalendarHandler from '../api/_routes/calendar/river-approve.js';
+import readEmailHandler from '../api/_routes/gmail/read.js';
+import riverHandler from '../api/_routes/river.js';
 
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 const sessionSecret = 'river-calendar-test-secret-with-at-least-thirty-two-characters';

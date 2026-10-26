@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import test from 'node:test';
 
 test('Email Desk loads every active unsent draft without the generic 100-row cap', () => {
-  const api = fs.readFileSync(new URL('../api/crm/email-drafts.js', import.meta.url), 'utf8');
+  const api = fs.readFileSync(new URL('../api/_routes/crm/email-drafts.js', import.meta.url), 'utf8');
   const ui = fs.readFileSync(new URL('../email-desk-organizer.js', import.meta.url), 'utf8');
 
   assert.match(api, /EMAIL_DESK_ACTIVE_STATUSES = \['draft','needs_review','needs_update','approved','ready_to_send'\]/);
@@ -15,7 +15,7 @@ test('Email Desk loads every active unsent draft without the generic 100-row cap
 });
 
 test('Email Desk keeps completed history bounded while preserving the full unsent queue', () => {
-  const api = fs.readFileSync(new URL('../api/crm/email-drafts.js', import.meta.url), 'utf8');
+  const api = fs.readFileSync(new URL('../api/_routes/crm/email-drafts.js', import.meta.url), 'utf8');
   assert.match(api, /EMAIL_DESK_HISTORY_STATUSES = \['sent','cancelled'\]/);
   assert.match(api, /EMAIL_DESK_HISTORY_LIMIT = 100/);
   assert.match(api, /return \[\.\.\.active, \.\.\.\(historyResult\.data \|\| \[\]\)\]/);

@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import gmailScan from '../api/gmail-scan.js';
-import sendEmail from '../api/send-email.js';
-import roles from '../api/crm/contact-roles.js';
-import emailDrafts from '../api/crm/email-drafts.js';
-import { createCommandSession } from '../api/_lib/auth.js';
+import gmailScan from '../api/_routes/gmail-scan.js';
+import sendEmail from '../api/_routes/send-email.js';
+import roles from '../api/_routes/crm/contact-roles.js';
+import emailDrafts from '../api/_routes/crm/email-drafts.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
 
 function response() { return { headers: {}, statusCode: 200, payload: null, setHeader(n,v){this.headers[n.toLowerCase()]=v;}, status(c){this.statusCode=c;return this;}, json(v){this.payload=v;return this;}, end(){return this;} }; }
 const cookie = () => `atara_command_session=${createCommandSession()}`;

@@ -53,11 +53,11 @@ On Vercel Pro, email sorting can run every 30 minutes: change its schedule to `*
 
 ## How it fits together
 
-- **Founder settings** live in the `command_settings` table, one row per Setup section. `api/_lib/founder-settings.js`
+- **Founder settings** live in the `command_settings` table, one row per Setup section. `api/_routes/_lib/founder-settings.js`
   turns them into the facts, voice rules and funding profile every AI helper reads. Nothing about a founder is in the code.
 - **The database** is built from one file, `supabase/schema/command-schema.sql`. First run applies it through
-  `api/setup/database.js`. It is safe to run again.
-- **The AI** runs on Gemini through `api/_lib/ai.js`. One key covers every feature.
+  `api/_routes/setup/database.js`. It is safe to run again.
+- **The AI** runs on Gemini through `api/_routes/_lib/ai.js`. One key covers every feature.
 - **Tests:** `npm test`. They include a check that the schema builds on an empty database and that no founder's
   details are written into the code.
 
@@ -65,3 +65,9 @@ On Vercel Pro, email sorting can run every 30 minutes: change its schedule to `*
 
 Command reads the founder's email to sort it and draft replies. Drafts are never sent without the founder pressing
 Send. Each copy's data stays in that founder's own Supabase project and Google account.
+
+## One server function
+
+Vercel's free Hobby plan allows 12 server functions per deployment. Command has many routes, so `api/router.js` is
+the only function. A rewrite in `vercel.json` sends every `/api/...` address to it, and it loads the matching file in
+`api/_routes`. To add a route, add its file under `api/_routes` and a line in `ROUTES` in `api/router.js`.

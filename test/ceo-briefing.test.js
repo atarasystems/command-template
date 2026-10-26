@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
-import handler from '../api/ai/ceo-briefing.js';
-import { createBriefingPrompt, buildBriefingContext, generateBriefing } from '../api/_lib/ceo-briefing.js';
-import { createCommandSession } from '../api/_lib/auth.js';
-import { AI_EMPLOYEES } from '../api/_lib/ai-team.js';
+import handler from '../api/_routes/ai/ceo-briefing.js';
+import { createBriefingPrompt, buildBriefingContext, generateBriefing } from '../api/_routes/_lib/ceo-briefing.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
+import { AI_EMPLOYEES } from '../api/_routes/_lib/ai-team.js';
 import fs from 'node:fs';
 
 const sessionSecret = 'test-session-secret-with-at-least-thirty-two-characters';
@@ -74,7 +74,7 @@ test('CEO Briefing does not force three priorities or invent relevance and team 
 });
 
 test('CEO Briefing remains read-only and uses only the canonical employee registry', () => {
-  const source = fs.readFileSync(new URL('../api/ai/ceo-briefing.js', import.meta.url), 'utf8');
+  const source = fs.readFileSync(new URL('../api/_routes/ai/ceo-briefing.js', import.meta.url), 'utf8');
   for (const mutation of ['.insert(', '.update(', '.delete(', '.rpc(']) assert.equal(source.includes(mutation), false);
   assert.deepEqual(AI_EMPLOYEES.map((employee) => employee.key), ['revenue_scout', 'business_development', 'grant_scout', 'follow_up', 'client_success', 'ceo_briefing']);
   assert.equal(AI_EMPLOYEES.find((employee) => employee.key === 'ceo_briefing').execution_mode, 'Command-assisted');

@@ -4,7 +4,7 @@ import fs from 'node:fs';
 const read=(path)=>fs.readFileSync(new URL(`../${path}`,import.meta.url),'utf8');
 
 test('application uploads stay in the private personal-docs bucket',()=>{
-  const source=read('api/applications/upload.js');
+  const source=read('api/_routes/applications/upload.js');
   assert.match(source,/const BUCKET = 'personal-docs'/);
   assert.match(source,/withCommandAuth/);
   assert.match(source,/MAX_BYTES = 3_500_000/);
@@ -12,14 +12,14 @@ test('application uploads stay in the private personal-docs bucket',()=>{
 });
 
 test('application downloads use short-lived signed URLs',()=>{
-  const source=read('api/applications/download.js');
+  const source=read('api/_routes/applications/download.js');
   assert.match(source,/createSignedUrl/);
   assert.match(source,/300/);
   assert.match(source,/withCommandAuth/);
 });
 
 test('deleting an uploaded document also removes its private object',()=>{
-  const source=read('api/applications/documents.js');
+  const source=read('api/_routes/applications/documents.js');
   assert.match(source,/storage_bucket/);
   assert.match(source,/storage_path/);
   assert.match(source,/\.remove\(\[existing\.data\.storage_path\]\)/);
@@ -27,7 +27,7 @@ test('deleting an uploaded document also removes its private object',()=>{
 
 test('Funding Vault replacement creates immutable versions without deleting old objects',()=>{
   const migration=read('supabase/schema/command-schema.sql');
-  const upload=read('api/applications/upload.js');
+  const upload=read('api/_routes/applications/upload.js');
   assert.match(migration,/command_funding_document_versions/);
   assert.match(migration,/supersedes_version_id/);
   assert.match(upload,/funding-vault/);
@@ -36,7 +36,7 @@ test('Funding Vault replacement creates immutable versions without deleting old 
 });
 
 test('Funding Vault upload validation distinguishes application and master uploads',()=>{
-  const upload=read('api/applications/upload.js');
+  const upload=read('api/_routes/applications/upload.js');
   assert.match(upload,/MISSING_DOCUMENT_KEY/);
   assert.match(upload,/MISSING_FILE/);
   assert.match(upload,/UNSUPPORTED_FILE_TYPE/);

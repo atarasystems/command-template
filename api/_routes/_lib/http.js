@@ -4,9 +4,11 @@ export function sendData(res, data, status = 200) {
 
 export function sendError(res, error, status) {
   const code = error?.code || 'INTERNAL_ERROR';
-  const publicStatus = status || statusForCode(code);
+  // An error Command raised on purpose carries its own status and a plain message for the founder: show it.
+  const chosen = Number.isInteger(error?.status) && error.status >= 400 && error.status < 600 ? error.status : null;
+  const publicStatus = status || chosen || statusForCode(code);
   const message = publicStatus >= 500
-    ? (error?.safeMessage || (code === 'CRM_NOT_CONFIGURED' ? error.message : 'Revenue CRM request failed'))
+    ? (error?.safeMessage || (chosen || code === 'CRM_NOT_CONFIGURED' ? error.message : 'Something went wrong on our side. Try again in a minute.'))
     : error.message;
 
   if (publicStatus >= 500 && code !== 'CRM_NOT_CONFIGURED') {

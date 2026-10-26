@@ -1,21 +1,21 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import projectsHandler from '../api/work/projects.js';
-import phasesHandler from '../api/work/phases.js';
-import itemsHandler from '../api/work/items.js';
-import todayHandler from '../api/work/today.js';
-import programsHandler from '../api/opportunities/programs.js';
-import intelligenceHandler from '../api/gmail/intelligence.js';
-import messageHandler from '../api/gmail/message.js';
-import actionHandler, { actionPlan } from '../api/gmail/action.js';
-import weeklyReviewHandler from '../api/gmail/weekly-review.js';
-import aiTeamHandler from '../api/ai/team.js';
-import { chooseOpportunityMatch, classifyEmail, inferDecisionStatus } from '../api/gmail/intelligence.js';
-import { findOrCreateLabel, modifyMessageLabels, trashMessage, listMessagesByLabel, WEEKLY_REVIEW_LABEL } from '../api/_lib/gmail.js';
-import { createCommandSession } from '../api/_lib/auth.js';
-import { hasInitializedSupabaseClient } from '../api/_lib/supabase.js';
-import { applicationWorkValues, dueDateValue, isActionable, normalizeItemInput, todayRank } from '../api/_lib/work.js';
-import { AI_EMPLOYEES, handoffPacket, summarizeAiTeam, validateAiAssignment } from '../api/_lib/ai-team.js';
+import projectsHandler from '../api/_routes/work/projects.js';
+import phasesHandler from '../api/_routes/work/phases.js';
+import itemsHandler from '../api/_routes/work/items.js';
+import todayHandler from '../api/_routes/work/today.js';
+import programsHandler from '../api/_routes/opportunities/programs.js';
+import intelligenceHandler from '../api/_routes/gmail/intelligence.js';
+import messageHandler from '../api/_routes/gmail/message.js';
+import actionHandler, { actionPlan } from '../api/_routes/gmail/action.js';
+import weeklyReviewHandler from '../api/_routes/gmail/weekly-review.js';
+import aiTeamHandler from '../api/_routes/ai/team.js';
+import { chooseOpportunityMatch, classifyEmail, inferDecisionStatus } from '../api/_routes/gmail/intelligence.js';
+import { findOrCreateLabel, modifyMessageLabels, trashMessage, listMessagesByLabel, WEEKLY_REVIEW_LABEL } from '../api/_routes/_lib/gmail.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
+import { hasInitializedSupabaseClient } from '../api/_routes/_lib/supabase.js';
+import { applicationWorkValues, dueDateValue, isActionable, normalizeItemInput, todayRank } from '../api/_routes/_lib/work.js';
+import { AI_EMPLOYEES, handoffPacket, summarizeAiTeam, validateAiAssignment } from '../api/_routes/_lib/ai-team.js';
 import fs from 'node:fs';
 
 function response() { return { statusCode: 200, payload: null, status(code) { this.statusCode = code; return this; }, json(value) { this.payload = value; return this; } }; }

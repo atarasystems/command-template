@@ -22,48 +22,15 @@
     }
   ],
   "functions": {
-    "api/send-email.js": {
-      "maxDuration": 30
-    },
-    "api/gmail-scan.js": {
-      "maxDuration": 30
-    },
-    "api/river-tts.js": {
-      "maxDuration": 30
-    },
-    "api/river.js": {
-      "maxDuration": 30
-    },
-    "api/river-action.js": {
-      "maxDuration": 60
-    },
-    "api/cron/reviews.js": {
-      "maxDuration": 120
-    },
-    "api/updates/index.js": {
-      "maxDuration": 60
-    },
-    "api/cron/email-triage.js": {
-      "maxDuration": 300
-    },
-    "api/email/index.js": {
-      "maxDuration": 300
-    },
-    "api/heads-up/index.js": {
-      "maxDuration": 300
-    },
-    "api/cron/funding.js": {
-      "maxDuration": 300
-    },
-    "api/cron/know-news.js": {
-      "maxDuration": 120
-    },
-    "api/know/index.js": {
-      "maxDuration": 120
-    },
-    "api/setup/database.js": {
-      "maxDuration": 60,
+    "api/router.js": {
+      "maxDuration": 300,
       "includeFiles": "supabase/schema/**"
     }
-  }
+  },
+  "rewrites": [
+    {
+      "source": "/api/:path((?!router$).*)",
+      "destination": "/api/router?__route=:path"
+    }
+  ]
 }

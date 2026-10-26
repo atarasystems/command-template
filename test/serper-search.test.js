@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { searchLeads } from '../api/_lib/web-search.js';
+import { searchLeads } from '../api/_routes/_lib/web-search.js';
 
 test('lead searches use Serper when its key is set', async () => {
   let seen;

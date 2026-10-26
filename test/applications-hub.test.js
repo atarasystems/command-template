@@ -5,22 +5,22 @@ import fs from 'node:fs';
 const read = (path) => fs.readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
 
 test('Applications Hub uses authenticated Command APIs', () => {
-  for (const path of ['api/applications/index.js','api/applications/answers.js','api/applications/facts.js','api/applications/draft.js','api/applications/submit.js','api/applications/documents.js','api/applications/export.js']) {
+  for (const path of ['api/_routes/applications/index.js','api/_routes/applications/answers.js','api/_routes/applications/facts.js','api/_routes/applications/draft.js','api/_routes/applications/submit.js','api/_routes/applications/documents.js','api/_routes/applications/export.js']) {
     const source = read(path);
     assert.match(source, /withCommandAuth/);
   }
 });
 
 test('submitted answers are frozen instead of overwritten', () => {
-  const answers = read('api/applications/answers.js');
-  const submit = read('api/applications/submit.js');
+  const answers = read('api/_routes/applications/answers.js');
+  const submit = read('api/_routes/applications/submit.js');
   assert.match(answers, /SUBMITTED_ANSWER_LOCKED/);
   assert.match(submit, /submitted_answer_text:row\.answer_text/);
   assert.match(submit, /answer_status:'submitted'/);
 });
 
 test('AI drafting is preparation only and grounded in current facts', () => {
-  const source = read('api/applications/draft.js');
+  const source = read('api/_routes/applications/draft.js');
   assert.match(source, /founder-review preparation only/i);
   assert.match(source, /current company facts/i);
   assert.match(source, /Never invent traction/i);
@@ -90,7 +90,7 @@ test('Existing master replacement keeps stored metadata out of the editable moda
 });
 
 test('Word export uses frozen submitted answer when available', () => {
-  const source = read('api/applications/export.js');
+  const source = read('api/_routes/applications/export.js');
   assert.match(source, /submitted_answer_text \|\| row\.answer_text/);
   assert.match(source, /application\/msword/);
 });

@@ -1,5 +1,5 @@
 // A made-up founder used across tests, so no real person's details live in the template.
-import { settingsFromRows } from '../../api/_lib/founder-settings.js';
+import { settingsFromRows } from '../../api/_routes/_lib/founder-settings.js';
 
 export const SAMPLE_ROWS = [
   { section: 'founder', value: { name: 'Maya Rivers', first_name: 'Maya', title: 'Founder and CEO', email: 'maya@northwind.example', signoff: 'Maya', bio: 'Former teacher.\nBuilds tools for small bakeries.' }, completed_at: '2026-10-01T00:00:00Z' },

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { planWeek, mondayOf, writePost, buildPrompt, defaultBrain } from '../api/_lib/linkedin-posts.js';
+import { planWeek, mondayOf, writePost, buildPrompt, defaultBrain } from '../api/_routes/_lib/linkedin-posts.js';
 import { SAMPLE } from './fixtures/founder.js';
 
 test('three posts on Mon, Wed, Fri with the Triple R mix', () => {

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 
-import calendarHandler, { normalizedConferenceUrls, safeHttpUrl } from '../api/calendar.js';
+import calendarHandler, { normalizedConferenceUrls, safeHttpUrl } from '../api/_routes/calendar.js';
 
 const html = fs.readFileSync(new URL('../index.html', import.meta.url), 'utf8');
 
@@ -27,7 +27,7 @@ test('calendar API preserves existing fields and safely normalizes detail fields
     : { ok: true, async json() { return { items: [{ id: 'event-1', summary: 'Planning', start: { dateTime: '2026-08-28T15:00:00Z' }, end: { dateTime: '2026-08-28T16:00:00Z' }, colorId: '2', location: 'Room 1', description: 'Discuss roadmap', htmlLink: 'https://calendar.google.com/event/1', hangoutLink: 'https://meet.google.com/abc-defg-hij', conferenceData: { entryPoints: [{ entryPointType: 'video', uri: 'https://zoom.us/j/123' }, { entryPointType: 'phone', uri: 'tel:+15551234567' }] } }] }; } };
   try {
     process.env.COMMAND_SESSION_SECRET = process.env.COMMAND_SESSION_SECRET || 'test-session-secret';
-    const { createCommandSession } = await import('../api/_lib/auth.js');
+    const { createCommandSession } = await import('../api/_routes/_lib/auth.js');
     const unauthenticated = response();
     await calendarHandler({ method: 'POST', headers: {}, body: { startISO: '2026-08-28T00:00:00Z', endISO: '2026-08-29T00:00:00Z' } }, unauthenticated);
     assert.equal(unauthenticated.statusCode, 401);

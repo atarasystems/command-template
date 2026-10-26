@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { cleanTriage, triagePrompt, replyPrompt, triageOne, runEmailTriage } from '../api/_lib/email-triage.js';
+import { cleanTriage, triagePrompt, replyPrompt, triageOne, runEmailTriage } from '../api/_routes/_lib/email-triage.js';
 
 function fakeDb(tables) {
   return {
@@ -122,7 +122,7 @@ test('one email with several things: each gets its own item, events stay out of 
 });
 
 test('a LinkedIn message notice becomes a "Reply on LinkedIn" to-do with no email draft', async () => {
-  const { platformOf, noEmailReplies } = await import('../api/_lib/email-triage.js');
+  const { platformOf, noEmailReplies } = await import('../api/_routes/_lib/email-triage.js');
   const meta = { sender: { name: 'Anthony Stroman via LinkedIn', email: 'messages-noreply@linkedin.com' } };
   assert.equal(platformOf(meta), 'LinkedIn');
   assert.equal(platformOf({ sender: { name: 'Maya Lee', email: 'maya@client.com' } }), null);

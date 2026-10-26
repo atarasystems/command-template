@@ -4,7 +4,7 @@ import test from 'node:test';
 import {
   LEAD_SOURCES, OFFERS, PIPELINES, QUALIFICATION_GRADES, TRIGGERS, dateValue, domainFromWebsite, emailValue, enumValue,
   moneyValue, pickDefined,
-} from '../api/_lib/validation.js';
+} from '../api/_routes/_lib/validation.js';
 
 test('normalizes a website into a duplicate-check domain', () => {
   assert.equal(domainFromWebsite('https://www.Example.com/path'), 'example.com');

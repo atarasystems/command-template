@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { queriesFor, toWatchPayload, fundingDeadlineHeadsUp, judgeRules, currentRevenue } from '../api/_lib/funding-finder.js';
-import { fundingQueries } from '../api/_lib/founder-settings.js';
+import { queriesFor, toWatchPayload, fundingDeadlineHeadsUp, judgeRules, currentRevenue } from '../api/_routes/_lib/funding-finder.js';
+import { fundingQueries } from '../api/_routes/_lib/founder-settings.js';
 import { SAMPLE } from './fixtures/founder.js';
 
 test('funding searches rotate by day and fill in the month and year', () => {
@@ -63,7 +63,7 @@ test('deadline reminders come back at each step and keep checkmarks within a ste
 });
 
 test('start-by and decide-by steps come before the deadline steps', async () => {
-  const { fundingStep } = await import('../api/_lib/funding-finder.js');
+  const { fundingStep } = await import('../api/_routes/_lib/funding-finder.js');
   const p = { deadline_at: '2026-12-16T16:00:00Z', prep_start_at: '2026-11-01', status: 'reviewing' };
   assert.equal(fundingStep(p, '2026-10-20'), null);
   assert.equal(fundingStep(p, '2026-10-30').key, 'decide');
@@ -73,7 +73,7 @@ test('start-by and decide-by steps come before the deadline steps', async () => 
 });
 
 test('Scout keeps only real program pages', async () => {
-  const { looksLikeProgramPage } = await import('../api/_lib/funding-finder.js');
+  const { looksLikeProgramPage } = await import('../api/_routes/_lib/funding-finder.js');
   assert.equal(looksLikeProgramPage('https://visionaries.co/wp-content/uploads/2026/06/photo.png'), false);
   assert.equal(looksLikeProgramPage('https://x.org/logo.JPG?v=2'), false);
   assert.equal(looksLikeProgramPage('https://x.org/wp-content/uploads/rules.pdf'), true);
@@ -81,7 +81,7 @@ test('Scout keeps only real program pages', async () => {
 });
 
 test('a program page with a fee or nonprofit-only rule is skipped', async () => {
-  const { checkProgramPage } = await import('../api/_lib/funding-finder.js');
+  const { checkProgramPage } = await import('../api/_routes/_lib/funding-finder.js');
   const fetchImpl = async () => ({ ok: true, url: 'https://x.org/grant', headers: { get: () => 'text/html' }, text: async () => '<p>Apply</p>' });
   const fee = await checkProgramPage('https://x.org/grant', { fetchImpl, today: '2026-10-21', ai: async () => JSON.stringify({ application_fee: '$15' }) });
   assert.equal(fee.skip, 'application_fee');
@@ -94,7 +94,7 @@ test('a program page with a fee or nonprofit-only rule is skipped', async () => 
 });
 
 test('morning and afternoon runs search different queries', async () => {
-  const { queriesFor } = await import('../api/_lib/funding-finder.js');
+  const { queriesFor } = await import('../api/_routes/_lib/funding-finder.js');
   const settings = { funding: { search_queries: Array.from({ length: 30 }, (_, i) => `grant ${i}`) } };
   const am = queriesFor(new Date('2026-10-21T08:30:00Z'), 12, settings);
   const pm = queriesFor(new Date('2026-10-21T17:30:00Z'), 12, settings);
@@ -102,7 +102,7 @@ test('morning and afternoon runs search different queries', async () => {
 });
 
 test('funding search uses Serper first when its key is set', async () => {
-  const { fundingSearch } = await import('../api/_lib/google-search.js');
+  const { fundingSearch } = await import('../api/_routes/_lib/google-search.js');
   const calls = [];
   const out = await fundingSearch({ query: 'x' }, { env: { SERPER_API_KEY: 'k', TAVILY_API_KEY: 't' }, serper: async () => { calls.push('serper'); return [{ url: 'https://a.org' }]; }, tavily: async () => { calls.push('tavily'); return []; } });
   assert.deepEqual(calls, ['serper']);
@@ -110,7 +110,7 @@ test('funding search uses Serper first when its key is set', async () => {
 });
 
 test('a program that already closed is saved to watch for its next round', async () => {
-  const { quickAddFunding } = await import('../api/_lib/funding-finder.js');
+  const { quickAddFunding } = await import('../api/_routes/_lib/funding-finder.js');
   const updates = []; let inserted = null;
   const db = { from: () => ({
     select() { return this; }, limit: async () => ({ data: [], error: null }),

@@ -2,11 +2,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import test from 'node:test';
 
-import { createCommandSession } from '../api/_lib/auth.js';
-import radarHandler from '../api/intelligence/radar.js';
-import { companyContext } from '../api/_lib/founder-settings.js';
+import { createCommandSession } from '../api/_routes/_lib/auth.js';
+import radarHandler from '../api/_routes/intelligence/radar.js';
+import { companyContext } from '../api/_routes/_lib/founder-settings.js';
 import { SAMPLE } from './fixtures/founder.js';
-import { INTELLIGENCE_SOURCES, buildRadarResult, canonicalizeUrl, classifyItem, dedupeItems, isFresh, parseFeed, safeHttpUrl } from '../api/_lib/intelligence.js';
+import { INTELLIGENCE_SOURCES, buildRadarResult, canonicalizeUrl, classifyItem, dedupeItems, isFresh, parseFeed, safeHttpUrl } from '../api/_routes/_lib/intelligence.js';
 
 function response() { return { statusCode: 200, payload: null, status(code) { this.statusCode = code; return this; }, json(value) { this.payload = value; return this; } }; }
 function feed(title = 'Important update', link = 'https://example.com/story?utm_source=x#part', date = 'Wed, 27 Aug 2026 12:00:00 GMT') { return `<rss><channel><item><title>${title}</title><link>${link}</link><pubDate>${date}</pubDate><description><![CDATA[Public source details about this update.]]></description></item></channel></rss>`; }
